@@ -1,0 +1,67 @@
+﻿@using Webmap_1A.Models
+@model List<Order>
+
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@section HeadStyleSection {
+    <style>
+        #map {
+            width: 100%;
+            height: 400px;
+          }
+    </style>
+    <script>
+          function initMap() {
+              var minsk = { lat: 53.9, lng: 27.56667 };
+              var model = @Html.Raw(Json.Encode(Model));
+            var map = new google.maps.Map(document.getElementById('map'), {
+              zoom: 5,
+              center: minsk
+              });
+              for (var i = 0; i < model.size; i++) {
+                  var pos = { lat: model[i].Lat, lng: model[i].Lng };
+                  var marker = new google.maps.Marker({
+                      position: pos,
+                      map: map
+                  });
+              }
+            
+          }
+    </script>
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcmcPucdZL2QY298-vQjZbRhf2RKR7gfY&callback=initMap">
+    </script>
+
+}
+
+<h2>Index</h2>
+<div id="map"></div>
+
+<table class ="table">
+    <tr>
+        <th>
+            Lat
+        </th>
+        <th>
+            Lng
+        </th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Lat)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Lng)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "EditOrder", new {id = item.Id})
+                @Html.ActionLink("Delete", "DeleteOrder", new {id = item.Id})
+            </td>
+        </tr>
+    }
+</table>
