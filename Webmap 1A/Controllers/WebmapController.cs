@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Webmap_1A.Models;
@@ -17,8 +18,7 @@ namespace Webmap_1A.Controllers
 
         public ActionResult Index()
         {
-            var orders = _orderService.GetOrders();
-            return View(orders);
+            return View();
         }
 
         public ActionResult AddOrder()

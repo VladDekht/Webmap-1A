@@ -16,26 +16,43 @@
     <script>
           function initMap() {
               var minsk = { lat: 53.9, lng: 27.56667 };
-              var model = @Html.Raw(Json.Encode(Model));
             var map = new google.maps.Map(document.getElementById('map'), {
               zoom: 5,
               center: minsk
               });
-              for (var i = 0; i < model.size; i++) {
-                  var pos = { lat: model[i].Lat, lng: model[i].Lng };
-                  var marker = new google.maps.Marker({
-                      position: pos,
-                      map: map
-                  });
-              }
+
+            $(function () {
+                $.ajax({
+                    url: "../../api/me/getorders",
+                    context: document.body
+                }).done(function (data) {
+                    $(data).each(function (index, value) {
+                        var pos = { lat: value.lat, lng: value.lng };
+                        var marker = new google.maps.Marker({
+                            position: pos,
+                            map: map
+                        });
+                    });
+                });
+            });
             
-          }
+        }
+
+          
     </script>
     <script async defer
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcmcPucdZL2QY298-vQjZbRhf2RKR7gfY&callback=initMap">
     </script>
-
 }
+
+@section Scripts{
+   
+    <script>
+        
+        
+
+        </script>>
+    }
 
 <h2>Index</h2>
 <div id="map"></div>

@@ -18,14 +18,16 @@ namespace Webmap_1A.Controllers
     public class MeController : ApiController
     {
         private ApplicationUserManager _userManager;
+        private OrderService _orderService;
 
         public MeController()
         {
         }
 
-        public MeController(ApplicationUserManager userManager)
+        public MeController(ApplicationUserManager userManager, OrderService orderService)
         {
             UserManager = userManager;
+            _orderService = orderService;
         }
 
         public ApplicationUserManager UserManager
@@ -42,11 +44,18 @@ namespace Webmap_1A.Controllers
 
         
         // GET api/Me
-        public GetViewModel Get()
+        public IEnumerable<Order> Get()
         {
-            return new GetViewModel { Hometown = "test1", Age = 20 };
-            //var user = UserManager.FindById(User.Identity.GetUserId());
-            //return new GetViewModel() { Hometown = user.Hometown };
+            _orderService = new OrderService();
+            return _orderService.GetOrders();
         }
+
+
+
+        //[Route("GetOrders")]
+        //public IEnumerable<Order> GetOrders()
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

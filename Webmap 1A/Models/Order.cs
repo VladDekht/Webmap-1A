@@ -1,12 +1,16 @@
-﻿namespace Webmap_1A.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Webmap_1A.Models
 {
     public class Order
     {
-        public float Lat { get; set; }
-        public float Lng { get; set; }
+        [Key]
         public int Id { get; set; }
-        //public string City { get; set; }
-        //public string Street { get; set; }
-        //public string Building { get; set; }
+        public Caller Caller { get; set; }
+        public Wrecker CurrentWrecker { get; set; }
+        //[System.ComponentModel.DataAnnotations.]
+        public Address PickFromAddress { get; set; }
+        public Address TakeToAddress { get; set; }
+        public string OtherInfo { get; set; }
     }
 }
