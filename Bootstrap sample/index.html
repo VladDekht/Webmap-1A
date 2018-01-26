@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>WebMap 1A</title>
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<link rel="stylesheet" href="css/font-awesome.css">
+	<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+	<div class="panel">
+		<div class="row" id="navbar">
+			<div class="col-md-2 bordered  styled" id="info-section">
+				<p>Information about dispatcher</p>
+				<div class="btn-group-horizontal btn-group-sm">
+					<button type="button" class="btn btn-secondary">Sign in</button>
+	  				<button type="button" class="btn btn-secondary">Sign out</button>
+				</div>
+			</div>
+			<div class="col-md-2 bordered" id ="order-section">
+				<p>Auftrag / Order</p>
+				<div class="btn-group-horizontal btn-group-sm">
+					<button type="button" class="btn btn-secondary" id="new-order-button">New order</button>
+	  				<button type="button" class="btn btn-secondary" id="cancel-order-button">Cancel</button>
+	  				<script src="js/neworder.js"></script>
+				</div>
+			</div>
+			<div class="col-md-1 bordered" id="zone1-section">
+				<p>Zone 1</p>
+				<div class="btn-group-horizontal btn-group-sm">
+					<button type="button" class="btn btn-secondary btn-sm" id="zone1-button-edit">Edit</button>
+					<button type="button" class="btn btn-secondary btn-sm" id="zone1-button-save">Save</button>
+				</div>
+			</div>
+			<div class="col-md-1 bordered" id="zone2-section">
+				<p>Zone 2</p>
+				<div class="btn-group-horizontal btn-group-sm">
+					<button type="button" class="btn btn-secondary btn-sm" id="zone2-button-edit">Edit</button>
+					<button type="button" class="btn btn-secondary btn-sm" id="zone2-button-save">Save</button>
+				</div>
+			</div>
+			<div class="col-md-1 bordered" id="zone3-section">
+				<p>Zone 3</p>
+				<div class="btn-group-horizontal btn-group-sm">
+					<button type="button" class="btn btn-secondary btn-sm" id="zone3-button-edit">Edit</button>
+					<button type="button" class="btn btn-secondary btn-sm" id="zone3-button-save">Save</button>
+				</div>
+			</div>
+			<div class="col-md-2 bordered" id="clock-section">
+				<div class="clock" id="clock">
+					<script src="js/clock.js" onload="startTime()"></script>
+				</div>
+			</div>
+			<div class="col-md-3 bordered" id="show-section">SHOW</div>
+		</div>
+	</div>
+	<div class =" fill" id="map"></div>
+	<script src="js/map.js"></script>
+
+	<script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcmcPucdZL2QY298-vQjZbRhf2RKR7gfY&language=en&callback=initMap">
+    </script>
+</body>
+</html>
