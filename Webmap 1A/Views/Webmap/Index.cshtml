@@ -1,9 +1,61 @@
 ﻿@using Webmap_1A.Models
 @model List<Order>
 
+@{
+    Layout = "~/Views/Webmap/Shared/_Layout.cshtml";
+}
 
 @{
     ViewBag.Title = "Index";
+}
+
+@section NavigationBar{
+    <div class="panel">
+        <div class="row" id="navbar">
+            <div class="col-md-2 bordered  styled" id="info-section">
+                <p>Information about dispatcher</p>
+                <div class="btn-group-horizontal btn-group-sm">
+                    <button type="button" class="btn btn-secondary">Sign in</button>
+                    <button type="button" class="btn btn-secondary">Sign out</button>
+                </div>
+            </div>
+            <div class="col-md-2 bordered" id="order-section">
+                <p>Auftrag / Order</p>
+                <div class="btn-group-horizontal btn-group-sm">
+                    <button type="button" class="btn btn-secondary" id="new-order-button">New order</button>
+                    <button type="button" class="btn btn-secondary" id="cancel-order-button">Cancel</button>
+                    <script src="js/neworder.js"></script>
+                </div>
+            </div>
+            <div class="col-md-1 bordered" id="zone1-section">
+                <p>Zone 1</p>
+                <div class="btn-group-horizontal btn-group-sm">
+                    <button type="button" class="btn btn-secondary btn-sm" id="zone1-button-edit">Edit</button>
+                    <button type="button" class="btn btn-secondary btn-sm" id="zone1-button-save">Save</button>
+                </div>
+            </div>
+            <div class="col-md-1 bordered" id="zone2-section">
+                <p>Zone 2</p>
+                <div class="btn-group-horizontal btn-group-sm">
+                    <button type="button" class="btn btn-secondary btn-sm" id="zone2-button-edit">Edit</button>
+                    <button type="button" class="btn btn-secondary btn-sm" id="zone2-button-save">Save</button>
+                </div>
+            </div>
+            <div class="col-md-1 bordered" id="zone3-section">
+                <p>Zone 3</p>
+                <div class="btn-group-horizontal btn-group-sm">
+                    <button type="button" class="btn btn-secondary btn-sm" id="zone3-button-edit">Edit</button>
+                    <button type="button" class="btn btn-secondary btn-sm" id="zone3-button-save">Save</button>
+                </div>
+            </div>
+            <div class="col-md-2 bordered" id="clock-section">
+                @*<div class="clock" id="clock">
+                        <script src="js/clock.js" onload="startTime()"></script>
+                    </div>*@
+            </div>
+            <div class="col-md-3 bordered" id="show-section">SHOW</div>
+        </div>
+    </div>
 }
 
 @section HeadStyleSection {
@@ -11,15 +63,77 @@
         #map {
             width: 100%;
             height: 400px;
-          }
+        }
     </style>
     <script>
-          function initMap() {
-              var minsk = { lat: 53.9, lng: 27.56667 };
+        function initMap() {
+
+            var minsk = { lat: 53.9, lng: 27.56667 };
+            var firstZoneCoords = [
+                { lat: 53.927925, lng: 27.506556 },
+                { lat: 53.894606, lng: 27.498059 },
+                { lat: 53.872999, lng: 27.530832 },
+                { lat: 53.894177, lng: 27.609488 },
+                { lat: 53.918061, lng: 27.603662 },
+                { lat: 53.931641, lng: 27.580114 },
+                { lat: 53.927925, lng: 27.506556 }
+            ];
+
             var map = new google.maps.Map(document.getElementById('map'), {
-              zoom: 5,
-              center: minsk
-              });
+                zoom: 11,
+                center: minsk
+            });
+
+            var firstZone = new google.maps.Polygon({
+                paths: firstZoneCoords,
+                strokeColor: '#0de5db',
+                strokeOpacity: 0.8,
+                strokeWeight: 1,
+                fillColor: '#0de5db',
+                fillOpacity: 0.19,
+                geodesic: true
+            });
+
+            firstZone.setMap(map);
+
+            var pos = { lat: 53.904539799999995, lng: 27.5615244 };
+            var marker = new google.maps.Marker({
+                position: pos,
+                map: map
+            });
+
+            document.getElementById('zone1-button-edit').addEventListener("click", function () {
+                firstZone.setMap(null);
+                firstZone = new google.maps.Polygon({
+                    paths: firstZoneCoords,
+                    strokeColor: '#0de5db',
+                    strokeOpacity: 0.8,
+                    strokeWeight: 1,
+                    fillColor: '#0de5db',
+                    fillOpacity: 0.19,
+                    editable: true,
+                    geodesic: true
+                });
+                firstZone.setMap(map);
+                document.getElementById('zone1-button-save').style.visibility = "visible";
+            })
+
+            document.getElementById('zone1-button-save').addEventListener("click", function () {
+                firstZone.setMap(null);
+                firstZoneCoords = firstZone.getPath();
+                firstZone = new google.maps.Polygon({
+                    paths: firstZoneCoords,
+                    strokeColor: '#0de5db',
+                    strokeOpacity: 0.8,
+                    strokeWeight: 1,
+                    fillColor: '#0de5db',
+                    fillOpacity: 0.19,
+                    geodesic: true,
+                    editable: false
+                });
+                firstZone.setMap(map);
+                document.getElementById('zone1-button-save').style.visibility = "hidden";
+            })
 
             $(function () {
                 $.ajax({
@@ -35,10 +149,10 @@
                     });
                 });
             });
-            
+
         }
 
-          
+
     </script>
     <script async defer
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcmcPucdZL2QY298-vQjZbRhf2RKR7gfY&callback=initMap">
@@ -46,18 +160,14 @@
 }
 
 @section Scripts{
-   
     <script>
-        
-        
 
-        </script>>
-    }
+    </script>
+}
 
-<h2>Index</h2>
-<div id="map"></div>
+<div id="map" style="margin-top: -20px"></div>
 
-<table class ="table">
+<table class="table">
     <tr>
         <th>
             Lat
@@ -66,19 +176,19 @@
             Lng
         </th>
     </tr>
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Lat)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Lng)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "EditOrder", new {id = item.Id})
-                @Html.ActionLink("Delete", "DeleteOrder", new {id = item.Id})
-            </td>
-        </tr>
-    }
+    @*@foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Lat)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Lng)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "EditOrder", new {id = item.Id})
+                    @Html.ActionLink("Delete", "DeleteOrder", new {id = item.Id})
+                </td>
+            </tr>
+        }*@
 </table>

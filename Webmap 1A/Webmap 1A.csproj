@@ -291,6 +291,8 @@
     <Content Include="Areas\HelpPage\Views\_ViewStart.cshtml" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\main.css" />
     <Content Include="Content\Site.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -378,6 +380,7 @@
     <Content Include="Views\Webmap\AddOrder.cshtml" />
     <Content Include="Views\Webmap\EditOrder.cshtml" />
     <Content Include="Views\Webmap\DeleteOrder.cshtml" />
+    <Content Include="Views\Webmap\Shared\_Layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

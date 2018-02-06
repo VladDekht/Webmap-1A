@@ -40,7 +40,9 @@ namespace Webmap_1A
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                  "~/Content/bootstrap.css",
-                 "~/Content/Site.css"));
+                // "~/Content/Site.css",
+                 "~/Content/main.css",
+                 "~/Content/font-awesome.css"));
         }
     }
 }
