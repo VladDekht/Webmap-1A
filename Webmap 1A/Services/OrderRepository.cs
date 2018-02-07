@@ -31,7 +31,11 @@ namespace Webmap_1A
 
         public void AddOrder(Order order)
         {
-            _orders.Add(order);
+            using (var db = new DataAccessService())
+            {
+                db.Orders.Add(order);
+                db.SaveChanges();
+            }
         }
     }
 }

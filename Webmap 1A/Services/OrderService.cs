@@ -20,5 +20,10 @@ namespace Webmap_1A
         {
             return _orderRepository.GetOrders();
         }
+
+        public void AddOrder(Order order)
+        {
+            _orderRepository.AddOrder(order);
+        }
     }
 }

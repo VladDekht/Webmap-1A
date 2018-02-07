@@ -1,12 +1,9 @@
-﻿@using Webmap_1A.Models
-@model List<Order>
-
-@{
+﻿@{
     Layout = "~/Views/Webmap/Shared/_Layout.cshtml";
 }
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Main";
 }
 
 @section NavigationBar{
@@ -22,7 +19,7 @@
             <div class="col-md-2 bordered" id="order-section">
                 <p>Auftrag / Order</p>
                 <div class="btn-group-horizontal btn-group-sm">
-                    <button type="button" class="btn btn-secondary" id="new-order-button">New order</button>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newOrder">New order</button>
                     <button type="button" class="btn btn-secondary" id="cancel-order-button">Cancel</button>
                     <script src="js/neworder.js"></script>
                 </div>
@@ -56,15 +53,41 @@
             <div class="col-md-3 bordered" id="show-section">SHOW</div>
         </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="newOrder" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
 }
 
 @section HeadStyleSection {
-    <style>
-        #map {
-            width: 100%;
-            height: 400px;
-        }
-    </style>
+
+
+}
+
+@section BottomScripts{
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcmcPucdZL2QY298-vQjZbRhf2RKR7gfY&callback=initMap">
+    </script>
+
+
+
     <script>
         function initMap() {
 
@@ -149,46 +172,10 @@
                     });
                 });
             });
-
         }
 
-
-    </script>
-    <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcmcPucdZL2QY298-vQjZbRhf2RKR7gfY&callback=initMap">
-    </script>
-}
-
-@section Scripts{
-    <script>
 
     </script>
 }
 
 <div id="map" style="margin-top: -20px"></div>
-
-<table class="table">
-    <tr>
-        <th>
-            Lat
-        </th>
-        <th>
-            Lng
-        </th>
-    </tr>
-    @*@foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Lat)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Lng)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "EditOrder", new {id = item.Id})
-                    @Html.ActionLink("Delete", "DeleteOrder", new {id = item.Id})
-                </td>
-            </tr>
-        }*@
-</table>

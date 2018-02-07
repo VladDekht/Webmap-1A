@@ -43,19 +43,25 @@ namespace Webmap_1A.Controllers
         }
 
         
-        // GET api/Me
         public IEnumerable<Order> Get()
         {
             _orderService = new OrderService();
             return _orderService.GetOrders();
         }
 
-
-
-        //[Route("GetOrders")]
-        //public IEnumerable<Order> GetOrders()
-        //{
-        //    throw new NotImplementedException();
-        //}
+        public void Post(Order newOrder)
+        {
+            try
+            {
+                _orderService = new OrderService();
+                _orderService.AddOrder(newOrder);
+            }
+            catch (Exception e)
+            {
+                // TODO: log exception
+                throw new HttpResponseException(System.Net.HttpStatusCode.InternalServerError);
+            }
+            
+        }
     }
 }

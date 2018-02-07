@@ -7,21 +7,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+
+    @RenderSection("HeadStyleSection", required: false)
 </head>
 <body>
-        @RenderSection("NavigationBar", required: false)
-    <div>
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
-    </div>
-
+    @RenderSection("NavigationBar", required: false)
+        
+    @RenderBody()
+    
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("HeadStyleSection", required: false)
-    @RenderSection("Scripts", required: false)
+    
+    @RenderSection("BottomScripts", required: false)
 </body>
 </html>
 
