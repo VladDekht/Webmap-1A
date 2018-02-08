@@ -21,7 +21,6 @@
                 <div class="btn-group-horizontal btn-group-sm">
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newOrder">New order</button>
                     <button type="button" class="btn btn-secondary" id="cancel-order-button">Cancel</button>
-                    <script src="js/neworder.js"></script>
                 </div>
             </div>
             <div class="col-md-1 bordered" id="zone1-section">
@@ -54,7 +53,8 @@
         </div>
     </div>
 
-    <!-- Modal -->
+    <!-- ko with: newOrder -->
+
     <div class="modal fade" id="newOrder" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -65,15 +65,24 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    ...
+                    <form id="fNewOrder">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="additionalInfo">AdditionalInfo</label>
+                                <input type="text" class="form-control" id="additionalInfo" data-bind="value: otherInfo" />
+                            </div>
+                        </div>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-primary" data-bind="click: saveChanges">Save changes</button>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- /ko -->
 }
 
 @section HeadStyleSection {
@@ -85,8 +94,6 @@
     <script async defer
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcmcPucdZL2QY298-vQjZbRhf2RKR7gfY&callback=initMap">
     </script>
-
-
 
     <script>
         function initMap() {
@@ -176,6 +183,9 @@
 
 
     </script>
+
+    @Scripts.Render("~/bundles/knockout")
+    @Scripts.Render("~/bundles/app")
 }
 
 <div id="map" style="margin-top: -20px"></div>
