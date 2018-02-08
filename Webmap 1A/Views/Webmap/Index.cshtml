@@ -1,4 +1,6 @@
-﻿@{
+﻿@model  Webmap_1A.Models.Order
+
+@{
     Layout = "~/Views/Webmap/Shared/_Layout.cshtml";
 }
 
@@ -7,6 +9,9 @@
 }
 
 @section NavigationBar{
+    <head>
+        <link type="text/css" href="~/Content/main.css" rel="stylesheet" />
+    </head>
     <div class="panel">
         <div class="row" id="navbar">
             <div class="col-md-2 bordered  styled" id="info-section">
@@ -23,7 +28,7 @@
                     <button type="button" class="btn btn-secondary" id="cancel-order-button">Cancel</button>
                 </div>
             </div>
-            <div class="col-md-1 bordered" id="zone1-section">
+            <div class="col-md-1 bordered" id="zone1-section" style="padding-bottom: 0px;">
                 <p>Zone 1</p>
                 <div class="btn-group-horizontal btn-group-sm">
                     <button type="button" class="btn btn-secondary btn-sm" id="zone1-button-edit">Edit</button>
@@ -45,9 +50,9 @@
                 </div>
             </div>
             <div class="col-md-2 bordered" id="clock-section">
-                @*<div class="clock" id="clock">
-                        <script src="js/clock.js" onload="startTime()"></script>
-                    </div>*@
+                <div class="clock" id="clock">
+                        <script src="~/Scripts/clock.js" onload="startTime()"></script>
+                    </div>
             </div>
             <div class="col-md-3 bordered" id="show-section">SHOW</div>
         </div>
@@ -59,10 +64,10 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
+                    <h5 class="modal-title" id="exampleModalLongTitle">Creating New Order</h5>
                 </div>
                 <div class="modal-body">
                     <form id="fNewOrder">
@@ -77,6 +82,86 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" data-bind="click: saveChanges">Save changes</button>
+
+                    @using (Html.BeginForm("orders", "api/me", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken();
+                        @Html.ValidationSummary(true)
+                        <div class = "caller">
+                            <h3 style="margin-top: 0px;">Caller</h3>
+                            <div>
+                                <h5>Caller Type</h5>
+                                @Html.TextBoxFor(m => m.Caller.Type, new { @class = "form-width"}) 
+                            </div>
+                            @*@Html.ValidationMessageFor(m => m.Id)*@
+                            <div>
+                                <h5>Caller Name</h5>
+                                @Html.TextBoxFor(m => m.Caller.Name, new { @class = "form-width" })
+                            </div>
+                            <div>
+                                <h5>Caller Phone Number</h5>
+                                @Html.TextBoxFor(m => m.Caller.PhoneNum, new { @class = "form-width" })
+                            </div>
+                        </div>
+                        <h3>Wrecker</h3>
+                        <div class = "wrecker">
+                            <div>
+                                <h5>Wrecker Plate Number</h5>
+                                @Html.TextBoxFor(m => m.CurrentWrecker.PlateNum, new { @class = "form-width" })
+                            </div>
+                            <div>
+                                <h5>Wrecker Driver Name</h5>
+                                @Html.TextBoxFor(m => m.CurrentWrecker.CurrentDriver.Name, new { @class = "form-width" })
+                            </div>
+                        </div>
+                        <h3>Address to Pick From</h3>
+                        <div class="address-to-pick">
+                            <div>
+                                <h5>City</h5>
+                                @Html.TextBoxFor(m => m.PickFromAddress.City, new { @class = "form-width" })
+                            </div>
+                            <div>
+                                <h5>Street</h5>
+                                @Html.TextBoxFor(m => m.PickFromAddress.Street, new { @class = "form-width" })
+                            </div>
+                            <div>
+                                <h5>House Number</h5>
+                                @Html.TextBoxFor(m => m.PickFromAddress.HouseNum, new { @class = "form-width" })
+                            </div>
+                            <div>
+                                <h5>Zip</h5>
+                                @Html.TextBoxFor(m => m.PickFromAddress.Zip, new { @class = "form-width" })
+                            </div>
+                        </div>
+                        <h3>Address to Take To</h3>
+                        <div class="address-to-take-to">
+                            <div>
+                                <h5>City</h5>
+                                @Html.TextBoxFor(m => m.TakeToAddress.City, new { @class = "form-width" })
+                            </div>
+                            <div>
+                                <h5>Street</h5>
+                                @Html.TextBoxFor(m => m.TakeToAddress.Street, new { @class = "form-width" })
+                            </div>
+                            <div>
+                                <h5>House Number</h5>
+                                @Html.TextBoxFor(m => m.TakeToAddress.HouseNum, new { @class = "form-width" })
+                            </div>
+                            <div>
+                                <h5>Zip</h5>
+                                @Html.TextBoxFor(m => m.TakeToAddress.Zip, new { @class = "form-width" })
+                            </div>
+                        </div>
+                        <h3>Other Information</h3>
+                        <div class="other-info">
+                            <h5>Other Information</h5>
+                            @Html.TextBoxFor(m => m.OtherInfo, new { @class = "form-width" })
+                            <br></br>
+                        </div>
+                        @*@Html.ValidationMessageFor(m => m.Caller.Name)*@
+                        <input type="submit" class="btn btn-primary" value="Submit customer data" />
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    }
                 </div>
             </div>
         </div>
@@ -94,6 +179,8 @@
     <script async defer
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcmcPucdZL2QY298-vQjZbRhf2RKR7gfY&callback=initMap">
     </script>
+
+
 
     <script>
         function initMap() {
@@ -165,27 +252,9 @@
                 document.getElementById('zone1-button-save').style.visibility = "hidden";
             })
 
-            $(function () {
-                $.ajax({
-                    url: "../../api/me/getorders",
-                    context: document.body
-                }).done(function (data) {
-                    $(data).each(function (index, value) {
-                        var pos = { lat: value.lat, lng: value.lng };
-                        var marker = new google.maps.Marker({
-                            position: pos,
-                            map: map
-                        });
-                    });
-                });
-            });
-        }
 
 
     </script>
-
-    @Scripts.Render("~/bundles/knockout")
-    @Scripts.Render("~/bundles/app")
 }
 
 <div id="map" style="margin-top: -20px"></div>
