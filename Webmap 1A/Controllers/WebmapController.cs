@@ -11,6 +11,7 @@ namespace Webmap_1A.Controllers
     public class WebmapController : Controller
     {
         private readonly OrderService _orderService;
+
         public WebmapController()
         {
             _orderService = new OrderService();
@@ -20,6 +21,20 @@ namespace Webmap_1A.Controllers
         {
             return View();
         }
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Create([Bind(Include = "Id,Caller,PickFromAddress,TakeToAddress")] Order order)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        db.Orders.Add(order);
+        //        db.SaveChanges();
+        //        return RedirectToAction("Index");
+        //    }
+
+        //    return RedirectToAction("OrderForm");
+        //}
 
         public ActionResult AddOrder()
         {

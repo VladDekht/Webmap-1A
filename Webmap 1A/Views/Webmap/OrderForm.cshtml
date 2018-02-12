@@ -1,0 +1,122 @@
+﻿@{
+    ViewBag.Title = "OrderForm";
+}
+@model  Webmap_1A.Models.Order
+
+
+<div class="modal fade" id="newOrder" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h5 class="modal-title" id="exampleModalLongTitle">Creating New Order</h5>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+
+                    @using (Html.BeginForm("orders", "api/me", FormMethod.Post))
+                    {
+                        <div class="col-md-4">
+                            @Html.AntiForgeryToken()
+                            @*@Html.ValidationSummary()*@
+                            <div class="caller">
+                                <h3>Caller</h3>
+                                <div>
+                                    <h5>Caller Type</h5>
+                                    @Html.EnumDropDownListFor(m => m.Caller.Type, new { @class = "custom-select" })@*, new { @class = "form-width form-control" })*@
+                                </div>
+                                @*@Html.ValidationMessageFor(m => m.Id)*@
+                                <div>
+                                    <h5>Caller Name</h5>
+                                    @Html.TextBoxFor(m => m.Caller.Name, new { @class = "form-width form-control" })
+                                    @Html.ValidationMessageFor(m => m.Caller.Name)
+                                </div>
+                                <div>
+                                    <h5>Caller Phone Number</h5>
+                                    @Html.TextBoxFor(m => m.Caller.PhoneNum, new { @class = "form-width form-control" })
+                                    @Html.ValidationMessageFor(m => m.Caller.PhoneNum)
+                                </div>
+                            </div>
+                            <h3>Wrecker</h3>
+                            <div class="wrecker">
+                                <div>
+                                    <h5>Wrecker Plate Number</h5>
+                                    @Html.TextBoxFor(m => m.CurrentWrecker.PlateNum, new { @class = "form-width form-control" })
+                                    @Html.ValidationMessageFor(m => m.CurrentWrecker.PlateNum)
+                                </div>
+                                <div>
+                                    <h5>Wrecker Driver Name</h5>
+                                    @Html.TextBoxFor(m => m.CurrentWrecker.CurrentDriver.Name, new { @class = "form-width form-control" })
+                                    @Html.ValidationMessageFor(m => m.CurrentWrecker.CurrentDriver.Name)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <h3>Address to Pick From</h3>
+                            <div class="address-to-pick">
+                                <div>
+                                    <h5>City</h5>
+                                    @Html.TextBoxFor(m => m.PickFromAddress.City, new { @class = "form-width form-control" })
+                                    @Html.ValidationMessageFor(m => m.PickFromAddress.City)
+                                </div>
+                                <div>
+                                    <h5>Street</h5>
+                                    @Html.TextBoxFor(m => m.PickFromAddress.Street, new { @class = "form-width form-control" })
+                                    @Html.ValidationMessageFor(m => m.PickFromAddress.Street)
+                                </div>
+                                <div>
+                                    <h5>House Number</h5>
+                                    @Html.TextBoxFor(m => m.PickFromAddress.HouseNum, new { @class = "form-width form-control" })
+                                    @Html.ValidationMessageFor(m => m.PickFromAddress.HouseNum)
+                                </div>
+                                <div>
+                                    <h5>Zip</h5>
+                                    @Html.TextBoxFor(m => m.PickFromAddress.Zip, new { @class = "form-width form-control" })
+                                </div>
+                            </div>
+                            <h3>Other Information</h3>
+                            <div class="other-info">
+                                @Html.TextBoxFor(m => m.OtherInfo,new { @class = "form-width form-control" })
+                                @Html.ValidationMessageFor(m => m.OtherInfo)
+                                <br /><br />
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <h3>Address to Take To</h3>
+                            <div class="address-to-take-to">
+                                <div>
+                                    <h5>City</h5>
+                                    @Html.TextBoxFor(m => m.TakeToAddress.City, new { @class = "form-width form-control", id = "city-to" })
+                                    @Html.ValidationMessageFor(m => m.TakeToAddress.City)
+                                </div>
+                                <div>
+                                    <h5>Street</h5>
+                                    @Html.TextBoxFor(m => m.TakeToAddress.Street, new { @class = "form-width form-control", id = "street-to" })
+                                    @Html.ValidationMessageFor(m => m.TakeToAddress.Street)
+                                </div>
+                                <div>
+                                    <h5>House Number</h5>
+                                    @Html.TextBoxFor(m => m.TakeToAddress.HouseNum, new { @class = "form-width form-control", id = "house-num-to" })
+                                    @Html.ValidationMessageFor(m => m.TakeToAddress.HouseNum)
+                                </div>
+                                <div>
+                                    <h5>Zip</h5>
+                                    @Html.TextBoxFor(m => m.TakeToAddress.Zip, new { @class = "form-width form-control", id="zip-to" })
+                                </div>
+                            </div>
+
+                        </div>
+                        <div>
+                            <input type="submit" class="btn btn-primary" id="submit-button" value="Submit customer data" />
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

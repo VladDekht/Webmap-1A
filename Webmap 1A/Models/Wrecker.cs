@@ -10,6 +10,7 @@ namespace Webmap_1A.Models
     {
         [Key]
         public int WreckerId { get; set; }
+        [Required]
         public string PlateNum { get; set; }
         public Driver CurrentDriver { get; set; }
     }

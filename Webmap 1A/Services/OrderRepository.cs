@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Webmap_1A.Models;
-using Webmap_1A.Services;
 
 namespace Webmap_1A
 {
@@ -18,7 +17,7 @@ namespace Webmap_1A
 
         public IEnumerable<Order> GetOrders()
         {
-            using (var db = new DataAccessService())
+            using (var db = new Webmap_1AContext())
             {
                 return db.Orders.ToList();
             }
@@ -31,7 +30,7 @@ namespace Webmap_1A
 
         public void AddOrder(Order order)
         {
-            using (var db = new DataAccessService())
+            using (var db = new Webmap_1AContext())
             {
                 db.Orders.Add(order);
                 db.SaveChanges();

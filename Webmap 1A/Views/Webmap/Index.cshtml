@@ -1,4 +1,4 @@
-﻿@model  Webmap_1A.Models.Order
+﻿
 
 @{
     Layout = "~/Views/Webmap/Shared/_Layout.cshtml";
@@ -51,121 +51,16 @@
             </div>
             <div class="col-md-2 bordered" id="clock-section">
                 <div class="clock" id="clock">
-                        <script src="~/Scripts/clock.js" onload="startTime()"></script>
-                    </div>
+                    <script src="~/Scripts/clock.js" onload="startTime()"></script>
+                </div>
             </div>
             <div class="col-md-3 bordered" id="show-section">SHOW</div>
         </div>
     </div>
 
     <!-- ko with: newOrder -->
+    @Html.Partial("~/Views/Webmap/OrderForm.cshtml", null, new ViewDataDictionary())
 
-    <div class="modal fade" id="newOrder" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <h5 class="modal-title" id="exampleModalLongTitle">Creating New Order</h5>
-                </div>
-                <div class="modal-body">
-                    <form id="fNewOrder">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label for="additionalInfo">AdditionalInfo</label>
-                                <input type="text" class="form-control" id="additionalInfo" data-bind="value: otherInfo" />
-                            </div>
-                        </div>
-                    </form>
-
-                    @using (Html.BeginForm("orders", "api/me", FormMethod.Post))
-    {
-                @Html.AntiForgeryToken();
-                @Html.ValidationSummary(true)
-                <div class="caller">
-                    <h3 style="margin-top: 0px;">Caller</h3>
-                    <div>
-                        <h5>Caller Type</h5>
-                        @Html.TextBoxFor(m => m.Caller.Type, new { @class = "form-width" })
-                    </div>
-                    @*@Html.ValidationMessageFor(m => m.Id)*@
-                    <div>
-                        <h5>Caller Name</h5>
-                        @Html.TextBoxFor(m => m.Caller.Name, new { @class = "form-width" })
-                    </div>
-                    <div>
-                        <h5>Caller Phone Number</h5>
-                        @Html.TextBoxFor(m => m.Caller.PhoneNum, new { @class = "form-width" })
-                    </div>
-                </div>
-                <h3>Wrecker</h3>
-                <div class="wrecker">
-                    <div>
-                        <h5>Wrecker Plate Number</h5>
-                        @Html.TextBoxFor(m => m.CurrentWrecker.PlateNum, new { @class = "form-width" })
-                    </div>
-                    <div>
-                        <h5>Wrecker Driver Name</h5>
-                        @Html.TextBoxFor(m => m.CurrentWrecker.CurrentDriver.Name, new { @class = "form-width" })
-                    </div>
-                </div>
-                <h3>Address to Pick From</h3>
-                <div class="address-to-pick">
-                    <div>
-                        <h5>City</h5>
-                        @Html.TextBoxFor(m => m.PickFromAddress.City, new { @class = "form-width" })
-                    </div>
-                    <div>
-                        <h5>Street</h5>
-                        @Html.TextBoxFor(m => m.PickFromAddress.Street, new { @class = "form-width" })
-                    </div>
-                    <div>
-                        <h5>House Number</h5>
-                        @Html.TextBoxFor(m => m.PickFromAddress.HouseNum, new { @class = "form-width" })
-                    </div>
-                    <div>
-                        <h5>Zip</h5>
-                        @Html.TextBoxFor(m => m.PickFromAddress.Zip, new { @class = "form-width" })
-                    </div>
-                </div>
-                <h3>Address to Take To</h3>
-                <div class="address-to-take-to">
-                    <div>
-                        <h5>City</h5>
-                        @Html.TextBoxFor(m => m.TakeToAddress.City, new { @class = "form-width" })
-                    </div>
-                    <div>
-                        <h5>Street</h5>
-                        @Html.TextBoxFor(m => m.TakeToAddress.Street, new { @class = "form-width" })
-                    </div>
-                    <div>
-                        <h5>House Number</h5>
-                        @Html.TextBoxFor(m => m.TakeToAddress.HouseNum, new { @class = "form-width" })
-                    </div>
-                    <div>
-                        <h5>Zip</h5>
-                        @Html.TextBoxFor(m => m.TakeToAddress.Zip, new { @class = "form-width" })
-                    </div>
-                </div>
-                <h3>Other Information</h3>
-                <div class="other-info">
-                    <h5>Other Information</h5>
-                    @Html.TextBoxFor(m => m.OtherInfo, new { @class = "form-width" })
-                    <br /><br />
-                </div>
-                @*@Html.ValidationMessageFor(m => m.Caller.Name)*@
-                <input type="submit" class="btn btn-primary" value="Submit customer data" />
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-}
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" data-bind="click: saveChanges">Save changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- /ko -->
 }
@@ -182,79 +77,9 @@
 
 
 
-    <script>
-        function initMap() {
-
-            var minsk = { lat: 53.9, lng: 27.56667 };
-            var firstZoneCoords = [
-                { lat: 53.927925, lng: 27.506556 },
-                { lat: 53.894606, lng: 27.498059 },
-                { lat: 53.872999, lng: 27.530832 },
-                { lat: 53.894177, lng: 27.609488 },
-                { lat: 53.918061, lng: 27.603662 },
-                { lat: 53.931641, lng: 27.580114 },
-                { lat: 53.927925, lng: 27.506556 }
-            ];
-
-            var map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 11,
-                center: minsk
-            });
-
-            var firstZone = new google.maps.Polygon({
-                paths: firstZoneCoords,
-                strokeColor: '#0de5db',
-                strokeOpacity: 0.8,
-                strokeWeight: 1,
-                fillColor: '#0de5db',
-                fillOpacity: 0.19,
-                geodesic: true
-            });
-
-            firstZone.setMap(map);
-
-            var pos = { lat: 53.904539799999995, lng: 27.5615244 };
-            var marker = new google.maps.Marker({
-                position: pos,
-                map: map
-            });
-
-            document.getElementById('zone1-button-edit').addEventListener("click", function () {
-                firstZone.setMap(null);
-                firstZone = new google.maps.Polygon({
-                    paths: firstZoneCoords,
-                    strokeColor: '#0de5db',
-                    strokeOpacity: 0.8,
-                    strokeWeight: 1,
-                    fillColor: '#0de5db',
-                    fillOpacity: 0.19,
-                    editable: true,
-                    geodesic: true
-                });
-                firstZone.setMap(map);
-                document.getElementById('zone1-button-save').style.visibility = "visible";
-            })
-
-            document.getElementById('zone1-button-save').addEventListener("click", function () {
-                firstZone.setMap(null);
-                firstZoneCoords = firstZone.getPath();
-                firstZone = new google.maps.Polygon({
-                    paths: firstZoneCoords,
-                    strokeColor: '#0de5db',
-                    strokeOpacity: 0.8,
-                    strokeWeight: 1,
-                    fillColor: '#0de5db',
-                    fillOpacity: 0.19,
-                    geodesic: true,
-                    editable: false
-                });
-                firstZone.setMap(map);
-                document.getElementById('zone1-button-save').style.visibility = "hidden";
-            })
-
-        }
-    </script>
-        
+    <script src="~/Scripts/map.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
     @Scripts.Render("~/bundles/knockout")
     @Scripts.Render("~/bundles/app")
 }

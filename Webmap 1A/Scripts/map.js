@@ -1,3 +1,5 @@
+var geocoder;
+
 function initMap() {
     var leipzig = {
         lat: 51.343479,
@@ -187,4 +189,22 @@ function initMap() {
     marker.addListener('click', function(){
         infowindow.open(map, marker);
     });
+
+    document.getElementById('submit-button').onclick = function () {
+        var address = document.getElementById('city-to').value + " " + document.getElementById('street-to').value + " " + document.getElementById('house-num-to').value;
+        alert(document.getElementById('city-to').value + " " + document.getElementById('street-to').value + " " + document.getElementById('house-num-to').value);
+        geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ 'address': address }, function (results, status) {
+            if (status == 'OK') {
+                map.setCenter(results[0].geometry.location);
+                var marker = new google.maps.Marker({
+                    map: map,
+                    position: results[0].geometry.location
+                });
+                alert('Geocode was succesful');
+            } else {
+                alert('Geocode was not successful for the following reason: ' + status);
+            }
+        });
+    };
 }

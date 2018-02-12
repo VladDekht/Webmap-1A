@@ -277,13 +277,13 @@
     <Compile Include="Models\MeViewModels.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\VehicleToPick.cs" />
+    <Compile Include="Models\Webmap_1AContext.cs" />
     <Compile Include="Models\Wrecker.cs" />
     <Compile Include="Services\OrderRepository.cs" />
     <Compile Include="Services\OrderService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
-    <Compile Include="Services\DataAccessService.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -331,6 +331,12 @@
     <Content Include="Scripts\clock.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.bootstrap.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\knockout-2.3.0.debug.js" />
     <Content Include="Scripts\knockout-2.3.0.js" />
     <Content Include="Scripts\knockout.mapping-latest.debug.js" />
@@ -386,6 +392,7 @@
     <Content Include="Views\Webmap\EditOrder.cshtml" />
     <Content Include="Views\Webmap\DeleteOrder.cshtml" />
     <Content Include="Views\Webmap\Shared\_Layout.cshtml" />
+    <Content Include="Views\Webmap\OrderForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

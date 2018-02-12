@@ -10,6 +10,7 @@ namespace Webmap_1A.Models
     {
         [Key]
         public int DriverId { get; set; }
+        [Required]
         public string Name { get; set; }
     }
 }

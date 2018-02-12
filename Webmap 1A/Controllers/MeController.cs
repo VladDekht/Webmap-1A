@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
@@ -48,20 +49,24 @@ namespace Webmap_1A.Controllers
             _orderService = new OrderService();
             return _orderService.GetOrders();
         }
-
+        
         public void Post(Order newOrder)
         {
-            try
+
+            if (ModelState.IsValid)
             {
-                _orderService = new OrderService();
-                _orderService.AddOrder(newOrder);
+                //try
+                //{
+                    _orderService = new OrderService();
+                    _orderService.AddOrder(newOrder);
+                //}
+                //catch (Exception e)
+                //{
+                //    // TODO: log exception
+                //    throw new HttpResponseException(System.Net.HttpStatusCode.InternalServerError);
+                //}
             }
-            catch (Exception e)
-            {
-                // TODO: log exception
-                throw new HttpResponseException(System.Net.HttpStatusCode.InternalServerError);
-            }
-            
+
         }
     }
 }

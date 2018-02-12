@@ -5,15 +5,15 @@
 
 	saveChanges = function () {
 		debugger;
-		//$.post( "../api/me/order", $( "#fNewOrder" ).serialize() );
-		var jsonObj = ko.mapping.toJS(self);
+		var jsonObj = $( "#fNewOrder" ).serialize();
+		//var jsonObj = ko.mapping.toJS(self);
 
 		$.ajax({
 			method: 'post',
 			url: "../api/me/order",
-			contentType: "application/json; charset=utf-8",
-			data: JSON.stringify(jsonObj),
-			dataType: "json",
+            //contentType: "application/json; charset=utf-8",
+            data: jsonObj, // JSON.stringify(jsonObj),
+			//dataType: "json",
 			//headers: {
 			//	'Authorization': 'Bearer ' + app.dataModel.getAccessToken()
 			//},

@@ -62,13 +62,9 @@ hr{
 }
 
 .caller{
-    display:flex;
-    flex-direction: column;
 }
 
 .wrecker {
-    display: flex;
-    flex-direction: column;
 }
 
 /*#info-section{
@@ -146,4 +142,8 @@ hr{
 .clock{
 	text-align: center;
 	font-size: 400%;
+}
+
+.modal-dialog{
+    width: 80%;
 }

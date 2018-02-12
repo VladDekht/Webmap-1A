@@ -11,6 +11,8 @@ namespace Webmap_1A.Models
         //[System.ComponentModel.DataAnnotations.]
         public Address PickFromAddress { get; set; }
         public Address TakeToAddress { get; set; }
+        [Required]
+        [Display(Name = "Other Info")]
         public string OtherInfo { get; set; }
     }
 }
