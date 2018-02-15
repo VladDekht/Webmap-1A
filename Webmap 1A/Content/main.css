@@ -103,8 +103,12 @@ hr{
 	visibility : hidden;
 }
 
+.container-row{
+    display: flex;
+}
+
 .form-width{
-    width: 70%;
+    width: 100%;
 }
 
 .btn-primary {
@@ -116,10 +120,15 @@ hr{
     border-color: black;
 }
 
+.dropdown-menu {
+    background-color: #f2f2f2;
+}
+
 .btn-secondary {
     margin-bottom: 2%;
     background-color: darkgrey;
 }
+
 
 .btn-group-vertical {
     margin-bottom: 2%;
@@ -139,6 +148,10 @@ hr{
 	
 }*/
 
+#address-list-container {
+    padding: 0 30px 0 30px;
+}
+
 .clock{
 	text-align: center;
 	font-size: 400%;
@@ -146,4 +159,8 @@ hr{
 
 .modal-dialog{
     width: 80%;
+}
+
+.show-address-button{
+    border: none;
 }
