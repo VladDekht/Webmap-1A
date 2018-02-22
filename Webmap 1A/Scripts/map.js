@@ -11,7 +11,7 @@ function initMap() {
     });
 
     var firstZoneCoords = [
-        { lat: 51.295495, lng: 12.240548 },
+        { lat: 51.295495, lng: 12.240548 }, 
         { lat: 51.313174, lng: 12.215440 },
         { lat: 51.378974, lng: 12.225440 },
         { lat: 51.418458, lng: 12.268922 },
@@ -176,6 +176,11 @@ function initMap() {
     })
 }
 
+function closeOrdersList() {
+        var menu = document.getElementById("show-orders-container");
+        menu.style.display = "none";
+    }
+
 function openOrderForm() {
     var menu = document.getElementById("form-menu");
     menu.style.display = "block";
@@ -196,6 +201,11 @@ function clearList() {
 
 function createListBox(buttonNum) {
     var list = document.getElementById('address-list-container');
+    var closeButton = document.createElement('button');
+    closeButton.class = "close";
+    closeButton.areaLabel = 'Close';
+    closeButton.type = "button";
+    list.appendChild(closeButton);
     list.style.display = "block";
     list.style.position = "absolute";
     if (buttonNum == 1) {

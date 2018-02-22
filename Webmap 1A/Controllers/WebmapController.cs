@@ -10,11 +10,11 @@ namespace Webmap_1A.Controllers
 {
     public class WebmapController : Controller
     {
-        private readonly OrderService _orderService;
+        //private readonly OrderService _orderService;
 
         public WebmapController()
         {
-            _orderService = new OrderService();
+            //_orderService = new OrderService();
         }
 
         public ActionResult Index()

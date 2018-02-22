@@ -270,6 +270,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Migrations\Orders\201802191207121_Initial Create.cs" />
+    <Compile Include="Migrations\Orders\201802191207121_Initial Create.Designer.cs">
+      <DependentUpon>201802191207121_Initial Create.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Orders\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Caller.cs" />
@@ -279,16 +285,20 @@
     <Compile Include="Models\MeViewModels.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\VehicleToPick.cs" />
-    <Compile Include="Models\Webmap_1AContext.cs" />
+    <Compile Include="Data\Webmap_1AContext.cs" />
     <Compile Include="Models\Wrecker.cs" />
-    <Compile Include="Services\OrderRepository.cs" />
-    <Compile Include="Services\OrderService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
+    <Compile Include="Services\OrderRepository.cs" />
+    <Compile Include="Services\OrderService.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\OrdersDatabase.mdf" />
+    <Content Include="App_Data\OrdersDatabase_log.ldf">
+      <DependentUpon>OrdersDatabase.mdf</DependentUpon>
+    </Content>
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Areas\HelpPage\Views\_ViewStart.cshtml" />
     <Content Include="Content\bootstrap.css" />
@@ -296,6 +306,7 @@
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\main.css" />
     <Content Include="Content\Site.css" />
+    <Content Include="Docs\Migrations.txt" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -351,11 +362,12 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\sammy-0.7.4.js" />
     <Content Include="Scripts\sammy-0.7.4.min.js" />
+    <Content Include="Scripts\showorders.js" />
     <Content Include="Scripts\umd\popper-utils.js" />
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
-    <Content Include="ToDoList.txt" />
+    <Content Include="Docs\ToDoList.txt" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
@@ -404,10 +416,9 @@
     <Content Include="Scripts\umd\popper-utils.min.js.map" />
     <Content Include="Scripts\umd\popper-utils.js.map" />
     <Content Include="Scripts\README.md" />
+    <Content Include="Views\Webmap\OrdersList.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
   </ItemGroup>
@@ -426,6 +437,11 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Scripts\index.d.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\Orders\201802191207121_Initial Create.resx">
+      <DependentUpon>201802191207121_Initial Create.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
