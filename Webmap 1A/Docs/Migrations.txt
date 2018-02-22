@@ -1,0 +1,5 @@
+﻿Enable-Migrations -ContextTypeName Webmap_1AContext -MigrationsDirectory Migrations\Orders
+
+add-migration -ConfigurationTypeName Webmap_1A.Migrations.Orders.Configuration "Initial Create"
+
+update-database -ConfigurationTypeName Webmap_1A.Migrations.Orders.Configuration
