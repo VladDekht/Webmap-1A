@@ -1,14 +1,90 @@
 ﻿var geocoder;
 var map;
+var mark;
+var pubnub;
+var placeSearch, autocompleteTo, autocompleteFrom;
+var markersNewTwo = [null, null];
+var wreckersMarkers = [];
 function initMap() {
+    initAutocomplete();
+
     var leipzig = {
         lat: 51.343479,
         lng: 12.387772
     };
+
+    //var pubnub = new PubNub({
+    //    publishKey: 'pub-c-20b30f50-c894-4868-b503-32cfb561cc0c',
+    //    subscribeKey: 'sub-c-37aa0d7a-1ae7-11e8-acdc-3a42756f9040'
+    //});
+    
+
     map = new google.maps.Map(document.getElementById('map'), {
         zoom: 11,
         center: leipzig
     });
+    //function getPosition() { // Заглушка
+    //    var randLat = 51 + Math.random();
+    //    var randLng = 12 + Math.random();
+    //    console.log("lat = " + randLat + " lng = " + randLng);
+    //    return { lat: randLat, lng: randLng };
+    //}
+    //
+    //function drawWrecker(mark) {
+    //    mark.setMap(null);
+    //    setMarker(mark, getPosition());
+    //}
+    //
+    //createMarker(getPosition());
+    //
+    //function setMarker(marker, LatLng) {
+    //    marker.setMap(null);
+    //    marker = new google.maps.Marker({
+    //        position: LatLng,
+    //        map: map
+    //    });
+    //}
+    //
+    //
+    //setInterval(function () {
+    //    drawWrecker(mark);
+    //}, 1000);
+    //window.lat = 37.7850;
+    //window.lng = -122.4383;
+    //function getLocation() {
+    //    if (navigator.geolocation) {
+    //        navigator.geolocation.getCurrentPosition(updatePosition);
+    //    }
+    //    return null;
+    //};
+    //function updatePosition(position) {
+    //    if (position) {
+    //        window.lat = position.coords.latitude;
+    //        window.lng = position.coords.longitude;
+    //    }
+    //}
+    //setInterval(function () { updatePosition(getLocation()); }, 10000);
+    //function currentLocation() {
+    //    return { lat: window.lat, lng: window.lng };
+    //};
+
+    //var redraw = function (payload) {
+    //    lat = payload.message.lat;
+    //    lng = payload.message.lng;
+    //    //map.setCenter({ lat: lat, lng: lng, alt: 0 });
+    //    mark.setPosition({ lat: lat, lng: lng, alt: 0 });
+    //};
+
+    //var pnChannel = "map2-channel";
+    //pubnub.subscribe({ channels: [pnChannel] });
+    //pubnub.addListener({ message: redraw });
+    //setInterval(function () {
+    //    pubnub.publish({ channel: pnChannel, message: currentLocation() });
+    //}, 5000);
+
+    //setMarker({ lat: 51.367195, lng: 12.366806 });
+
+    
 
     var firstZoneCoords = [
         { lat: 51.295495, lng: 12.240548 }, 
@@ -174,12 +250,45 @@ function initMap() {
         thirdZone.setMap(map);
         document.getElementById('zone3-button-save').style.visibility = "hidden";
     })
+    function wreckersMarkers() {
+        var actionUrl = "../api/me/GetWreckers";
+        $.getJSON(actionUrl, function (res) {
+            $.each(res, function (i) {
+                actionUrl = "/api/me/" + res[i].WreckerId + "/GetWreckerById";
+                $.getJSON(actionUrl, function (wrecker) {
+                    var LatLng = { lat: wrecker.CurrentLocation.Lat, lng: wrecker.CurrentLocation.Lng };
+                    createMarker(LatLng);
+
+                });
+            });
+        });
+    }
+    document.getElementById('get-markers-button').addEventListener("click", wreckersMarkers);
 }
 
 function closeOrdersList() {
         var menu = document.getElementById("show-orders-container");
         menu.style.display = "none";
     }
+
+var INTERVAL = 2000;
+
+function getMarkers() {
+    var actionUrl = "../api/Me/ShowDemo";
+    $.getJSON(actionUrl, function (res) {
+        //for (var i = 0, len = res.length; i < len; i++) {
+        //console.log(res.CurLocation.Lat);
+        //console.log(res.CurLocation.Lng);
+        mark.setMap(null);
+            mark= new google.maps.Marker({
+                position: new google.maps.LatLng(res.CurLocation.Lat, res.CurLocation.Lng),
+                //icon: "../Content/Images/trucker.png",
+                map: map
+            });
+        //}
+        window.setTimeout(getMarkers, INTERVAL);
+    }, "json");
+}
 
 function openOrderForm() {
     var menu = document.getElementById("form-menu");
@@ -192,38 +301,13 @@ function openOrderForm() {
 function closeOrderForm() {
     var menu = document.getElementById("form-menu");
     menu.style.display = "none";
-    closeListBox();
 }
 
 function clearList() {
     document.getElementById('address-list-container').innerHTML = "";
 }
 
-function createListBox(buttonNum) {
-    var list = document.getElementById('address-list-container');
-    var closeButton = document.createElement('button');
-    closeButton.class = "close";
-    closeButton.areaLabel = 'Close';
-    closeButton.type = "button";
-    list.appendChild(closeButton);
-    list.style.display = "block";
-    list.style.position = "absolute";
-    if (buttonNum == 1) {
-        //list.style.marginTop = ((-1)* ($(window).height() - document.getElementById('city-from').getBoundingClientRect().top)/100)..toString;
-        list.style.margin = "-70vh 0 0 1vh";
-    }
-    else if (buttonNum == 2 ) {
-        list.style.margin = "-56vh 0 0 1vh";
-    }
-}
-
-function closeListBox() {
-    var list = document.getElementById('address-list-container');
-    clearList();
-    list.style.display = "none";
-}
-
-function setMarker(LatLng) {
+function createMarker(LatLng) {
     //centering the map by new marker position can be added 
     var marker = new google.maps.Marker({
         position: LatLng,
@@ -241,55 +325,68 @@ function setMarker(LatLng) {
     marker.addListener('dblclick', function () {
         marker.setMap(null);
     });
+
+    return marker;
 }
 
-function listItemClicked(res) {
-    setMarker(res.geometry.location);
-    closeListBox();
-}
 
-document.getElementById("show-button-1").addEventListener("click", function () {
-    var address = document.getElementById('city-from').value + " " + document.getElementById('street-from').value + " " + document.getElementById('house-num-from').value;
-    geocoder = new google.maps.Geocoder();
-    geocoder.geocode({ 'address': address }, function (results, status) {
-        if (status == 'OK') {
-            for (var i = 0; i < results.length; i++) {
-                var elem = document.createElement("a");
-                elem.class = "list-group-item list-group-item-action";
-                var res = results[i];
-                var h5 = document.createElement('h5');
-                h5.innerHTML = results[i].formatted_address;
-                
-                elem.appendChild(h5);
-                h5.addEventListener("click", listItemClicked(results[i]));
-                document.getElementById("address-list-container").appendChild(elem);
+
+
+document.getElementById("show-button-from").addEventListener("click", function () {
+    var address = document.getElementById('autocompleteFrom').value;
+    if (address) {
+        geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ 'address': address }, function (results, status) {
+            if (status == 'OK') {
+                if (markersNewTwo[0])
+                    markersNewTwo[0].setMap(null);
+                document.getElementById('lat_from').value = results[0].geometry.location.lat();
+                document.getElementById('lng_from').value = results[0].geometry.location.lng();
+                markersNewTwo[0] = createMarker(results[0].geometry.location);
+            } else {
+                alert('Geocode was not successful for the following reason: ' + status);
             }
-            createListBox(1);
-        } else {
-            alert('Geocode was not successful for the following reason: ' + status);
-        }
-    });
+        });
+    }
 });
 
-document.getElementById("show-button-2").addEventListener("click", function () {
-    var address = document.getElementById('city-to').value + " " + document.getElementById('street-to').value + " " + document.getElementById('house-num-to').value;
-    geocoder = new google.maps.Geocoder();
-    geocoder.geocode({ 'address': address }, function (results, status) {
-        if (status == 'OK') {
-            for (var i = 0; i < results.length; i++) {
-                var elem = document.createElement("a");
-                elem.class = "list-group-item list-group-item-action";
-                var res = results[i];
-                var h5 = document.createElement('h5');
-                h5.innerHTML = results[i].formatted_address;
-
-                elem.appendChild(h5);
-                h5.addEventListener("click", listItemClicked(results[i]));
-                document.getElementById("address-list-container").appendChild(elem);
+document.getElementById("show-button-to").addEventListener("click", function () {
+    var address = document.getElementById('autocompleteTo').value;
+    if (address) {
+        geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ 'address': address }, function (results, status) {
+            if (status == 'OK') {
+                if (markersNewTwo[1])
+                    markersNewTwo[1].setMap(null);
+                document.getElementById('lat_to').value = results[0].geometry.location.lat();
+                document.getElementById('lng_to').value = results[0].geometry.location.lng();
+                markersNewTwo[1] = createMarker(results[0].geometry.location);
+            } else {
+                alert('Geocode was not successful for the following reason: ' + status);
             }
-            createListBox(2);
-        } else {
-            alert('Geocode was not successful for the following reason: ' + status);
-        }
-    });
+        });
+    }
 });
+
+//document.getElementById("show-button-2").addEventListener("click", function () {
+//    var address = document.getElementById('city-to').value + " " + document.getElementById('street-to').value + " " + document.getElementById('house-num-to').value;
+//    geocoder = new google.maps.Geocoder();
+//    geocoder.geocode({ 'address': address }, function (results, status) {
+//        if (status == 'OK') {
+//            for (var i = 0; i < results.length; i++) {
+//                var elem = document.createElement("a");
+//                elem.class = "list-group-item list-group-item-action";
+//                var res = results[i];
+//                var h5 = document.createElement('h5');
+//                h5.innerHTML = results[i].formatted_address;
+
+//                elem.appendChild(h5);
+//                h5.addEventListener("click", listItemClicked(results[i]));
+//                document.getElementById("address-list-container").appendChild(elem);
+//            }
+//            createListBox(2);
+//        } else {
+//            alert('Geocode was not successful for the following reason: ' + status);
+//        }
+//    });
+//});

@@ -6,110 +6,144 @@
 <div class="dropdown-menu  col-md-4" id="form-menu">
     <div class="order-form-body">
         <div class=" container">
-        
-        
-        @using (Html.BeginForm("orders", "api/me", FormMethod.Post))
-        {
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="col-md-2">
-                        <h6>Caller Type</h6>
-                        @Html.EnumDropDownListFor(m => m.Caller.Type, new { @class = "custom-select" })
-                    </div>
-                    <div class="col-md-3">
-                        <h6>Caller Name</h6>
-                        @Html.TextBoxFor(m => m.Caller.Name, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.Caller.Name)
-                    </div>
-                    <div class="col-md-3">
-                        <h6>Caller Phone Number</h6>
-                        @Html.TextBoxFor(m => m.Caller.PhoneNum, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.Caller.PhoneNum)
-                    </div>
-                    <div class="col-md-2">
-                        <h6>Driver Name</h6>
-                        @Html.TextBoxFor(m => m.CurrentWrecker.CurrentDriver.Name, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.CurrentWrecker.CurrentDriver.Name)
-                    </div>
-                    <div class="col-md-2">
-                        <h6>Plate</h6>
-                        @Html.TextBoxFor(m => m.CurrentWrecker.PlateNum, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.CurrentWrecker.PlateNum)
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12 container">
-                    <h4 id="h4-address-from">
-                        Address to Pick From
-                        <a class="show-address-button btn-sm glyphicon glyphicon-search" id="show-button-1"></a>
-                    </h4>
 
-                    <div class="col-md-3">
-                        <h6>City</h6>
-                        @Html.TextBoxFor(m => m.PickFromAddress.City, new { @class = "pick form-control", id= "city-from" })
-                        @Html.ValidationMessageFor(m => m.PickFromAddress.City)
-                    </div>
-                    <div class="col-md-3">
-                        <h6>Street</h6>
-                        @Html.TextBoxFor(m => m.PickFromAddress.Street, new { @class = "pick form-control", id = "street-from" })
-                        @Html.ValidationMessageFor(m => m.PickFromAddress.Street)
-                    </div>
-                    <div class="col-md-3">
-                        <h6>House Number</h6>
-                        @Html.TextBoxFor(m => m.PickFromAddress.HouseNum, new { @class = "pick form-control", id = "house-num-from" })
-                        @Html.ValidationMessageFor(m => m.PickFromAddress.HouseNum)
-                    </div>
-                    <div class="col-md-3">
-                        <h6>ZIP</h6>
-                        @Html.TextBoxFor(m => m.PickFromAddress.Zip, new { @class = "form-control" })
-                        @*@Html.ValidationMessageFor(m => m.PickFromAddress.Zip)*@
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12 container ">
-                    <h4 id="h4-address-to">
-                        Address to Take To
-                        <a class="show-address-button btn-sm glyphicon glyphicon-search" id="show-button-2"></a>
-                    </h4>
-                    <div class="col-md-3">
-                        <h6>City</h6>
-                        @Html.TextBoxFor(m => m.TakeToAddress.City, new { @class = "form-control", id = "city-to" })
-                        @Html.ValidationMessageFor(m => m.TakeToAddress.City)
-                    </div>
-                    <div class="col-md-3">
-                        <h6>Street</h6>
-                        @Html.TextBoxFor(m => m.TakeToAddress.Street, new { @class = "form-control", id = "street-to" })
-                        @Html.ValidationMessageFor(m => m.TakeToAddress.Street)
-                    </div>
-                    <div class="col-md-3">
-                        <h6>House Number</h6>
-                        @Html.TextBoxFor(m => m.TakeToAddress.HouseNum, new { @class = "form-control", id = "house-num-to" })
-                        @Html.ValidationMessageFor(m => m.TakeToAddress.HouseNum)
-                    </div>
-                    <div class="col-md-3">
-                        <h6>ZIP</h6>
-                        @Html.TextBoxFor(m => m.TakeToAddress.Zip, new { @class = "form-control" })
-                        @*@Html.ValidationMessageFor(m => m.TakeToAddress.Zip)*@
+
+            @using (Html.BeginForm("orders", "api/me", FormMethod.Post))
+            {
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-2">
+                            <h6>Caller Type</h6>
+                            @Html.EnumDropDownListFor(m => m.Caller.Type, new { @class = "custom-select" })
+                        </div>
+                        <div class="col-md-3">
+                            <h6>Caller Name</h6>
+                            @Html.TextBoxFor(m => m.Caller.Name, new { @class = "my-form-control" })
+                            @Html.ValidationMessageFor(m => m.Caller.Name)
+                        </div>
+                        <div class="col-md-3">
+                            <h6>Caller Phone Number</h6>
+                            @Html.TextBoxFor(m => m.Caller.PhoneNum, new { @class = "my-form-control" })
+                            @Html.ValidationMessageFor(m => m.Caller.PhoneNum)
+                        </div>
+                        <div class="col-md-2">
+                            <h6>Driver Name</h6>
+                            @Html.TextBoxFor(m => m.CurrentWrecker.CurrentDriver.Name, new { @class = "my-form-control" })
+                            @Html.ValidationMessageFor(m => m.CurrentWrecker.CurrentDriver.Name)
+                        </div>
+                        <div class="col-md-2">
+                            <h6>Plate</h6>
+                            @Html.TextBoxFor(m => m.CurrentWrecker.PlateNum, new { @class = "my-form-control" })
+                            @Html.ValidationMessageFor(m => m.CurrentWrecker.PlateNum)
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12 container">
-                    <h4>Other Information</h4>
-                    @Html.TextBoxFor(m => m.OtherInfo, new { @class = "form-control" })
-                    @*@Html.ValidationMessageFor(m => m.OtherInfo)*@
+                <div class="row">
+                    <div class="col-md-12 container">
+                        <h4 id="h4-address-from">
+                            Address to Pick From
+                            <button type="button" class="show-address-button btn-sm glyphicon glyphicon-search" id="show-button-from"></button>
+                        </h4>
+                        @Html.TextBoxFor(m => m.PickFromAddress.Lat, new { style = "display: none", id = "lat_from" })
+                        @Html.TextBoxFor(m => m.PickFromAddress.Lng, new { style = "display: none", id = "lng_from" })
+                        <div id="locationField">
+                            <input class="my-form-control" id="autocompleteFrom" @*onfocus="geolocate()"*@ placeholder="Enter your address" type="text">
+
+                        </div>
+                        <div class="col-md-3" style="display:flex">
+                            <div style="display: block">
+                                <label style="margin-right:10px">City</label>
+                            </div>
+                            <div style="display: block">
+                                @Html.TextBoxFor(m => m.PickFromAddress.City, new { @class = "pick my-form-control", id = "locality_from" })
+                            </div>
+                        </div>
+                        <div class="col-md-6" style="display:flex">
+                            <label style="margin-right:10px">Street</label>
+                            @Html.TextBoxFor(m => m.PickFromAddress.Street, new { @class = "pick my-form-control", id = "route_from", style = "width: 150%; border-radius: 4px 0 0 4px" })
+                            @Html.TextBoxFor(m => m.PickFromAddress.HouseNum, new { @class = "pick my-form-control", id = "street_number_from", style = "width: 50%; border-radius: 0 4px 4px 0" })
+                        </div>
+                        <div class="col-md-3" style="display:flex">
+                            <label style="margin-right:10px">ZIP</label>
+                            @Html.TextBoxFor(m => m.PickFromAddress.Zip, new { @class = "my-form-control", id = "postal_code_from" })
+                            @*@Html.ValidationMessageFor(m => m.PickFromAddress.Zip)*@
+                        </div>
+                        <div style="display: block; color: red;">
+                            <div>
+                                @Html.ValidationMessageFor(m => m.PickFromAddress.City)
+                            </div>
+                            <div>
+                                @Html.ValidationMessageFor(m => m.PickFromAddress.Street)
+                            </div>
+                            <div>
+                                @Html.ValidationMessageFor(m => m.PickFromAddress.HouseNum)
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-8">
-                    <br />
-                    <input type="submit" class="btn btn-primary" id="submit-button" value="Submit customer data" />
-                    @*<button type="button" class="btn btn-secondary">Close</button>*@
+                <div class="row">
+                    <div class="col-md-12 container">
+                        <h4 id="h4-address-from">
+                            Address to Take To
+                            <button type="button" class="show-address-button btn-sm glyphicon glyphicon-search" id="show-button-to"></button>
+                        </h4>
+                        @Html.TextBoxFor(m => m.TakeToAddress.Lat, new { style = "display: none", id = "lat_to" })
+                        @Html.TextBoxFor(m => m.TakeToAddress.Lng, new { style = "display: none", id = "lng_to" })
+                        <div id="locationField">
+                            <input class="my-form-control" id="autocompleteTo" @*onfocus="geolocate()"*@ placeholder="Enter your address" type="text">
+
+                        </div>
+                        <div class="col-md-3" style="display:flex">
+                            <div style="display: block">
+                                <label style="margin-right:10px">City</label>
+                            </div>
+                            <div style="display: block">
+                                @Html.TextBoxFor(m => m.TakeToAddress.City, new { @class = "pick my-form-control", id = "locality_to" })
+
+                            </div>
+                        </div>
+                        <div class="col-md-6" style="display:flex">
+                            <label style="margin-right:10px">Street</label>
+                            @Html.TextBoxFor(m => m.TakeToAddress.Street, new { @class = "pick my-form-control", id = "route_to", style = "width: 150%; border-radius: 4px 0 0 4px" })
+
+                            @Html.TextBoxFor(m => m.TakeToAddress.HouseNum, new { @class = "pick my-form-control", id = "street_number_to", style = "width: 50%; border-radius: 0 4px 4px 0" })
+
+                        </div>
+
+                        <div class="col-md-3" style="display:flex">
+                            <label style="margin-right:10px">ZIP</label>
+                            @Html.TextBoxFor(m => m.TakeToAddress.Zip, new { @class = "my-form-control", id = "postal_code_to" })
+                            @*@Html.ValidationMessageFor(m => m.TakeToAddress.Zip)*@
+                        </div>
+                        <div style="display: block; color: red;">
+                            <div>
+                                @Html.ValidationMessageFor(m => m.TakeToAddress.City)
+                            </div>
+                            <div>
+                                @Html.ValidationMessageFor(m => m.TakeToAddress.Street)
+                            </div>
+                            <div>
+                                @Html.ValidationMessageFor(m => m.TakeToAddress.HouseNum)
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        }
+                <div class="row">
+                    <div class="col-md-12 container">
+                        <h4>Other Information</h4>
+                        @Html.TextBoxFor(m => m.OtherInfo, new { @class = "my-form-control" })
+                        @*@Html.ValidationMessageFor(m => m.OtherInfo)*@
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <br />
+                        <input type="submit" class="btn btn-primary" id="submit-button" value="Submit customer data" />
+                        <input type="reset" class="btn btn-secondary" id="reset-button" value="Reset data" />
+                        @*<button type="button" class="btn btn-secondary">Close</button>*@
+                    </div>
+                </div>
+            }
         </div>
     </div>
 </div>
@@ -118,24 +152,22 @@
 
 </div>
 
-<script>
 
-</script>
 
 @*var address = document.getElementById('city-to').value + " " + document.getElementById('street-to').value + " " + document.getElementById('house-num-to').value;
-        alert(document.getElementById('city-to').value + " " + document.getElementById('street-to').value + " " + document.getElementById('house-num-to').value);
-        geocoder = new google.maps.Geocoder();
-        geocoder.geocode({ 'address': address }, function (results, status) {
-            if (status == 'OK') {
-                map.setCenter(results[0].geometry.location);
-                var marker = new google.maps.Marker({
-                    map: map,
-                    position: results[0].geometry.location
-                });
-            } else {
-                alert('Geocode was not successful for the following reason: ' + status);
-            }
-        });*@
+    alert(document.getElementById('city-to').value + " " + document.getElementById('street-to').value + " " + document.getElementById('house-num-to').value);
+    geocoder = new google.maps.Geocoder();
+    geocoder.geocode({ 'address': address }, function (results, status) {
+        if (status == 'OK') {
+            map.setCenter(results[0].geometry.location);
+            var marker = new google.maps.Marker({
+                map: map,
+                position: results[0].geometry.location
+            });
+        } else {
+            alert('Geocode was not successful for the following reason: ' + status);
+        }
+    });*@
 
 @*<div class="modal fade" id="newOrder" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">

@@ -6,8 +6,10 @@ namespace Webmap_1A.Models
     [Table("Orders")]
     public class Order
     {
+        public enum OrderStatus { Pending, InProcess, Cancelled, Done }
         [Key]
         public int Id { get; set; }
+        public OrderStatus CurrentStatus { get; set; }
         public Caller Caller { get; set; }
         public Wrecker CurrentWrecker { get; set; }
         //[System.ComponentModel.DataAnnotations.]

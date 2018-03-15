@@ -25,7 +25,7 @@
                 <p>Auftrag / Order</p>
                 <div class="btn-group-horizontal btn-group-sm">
                     @*<button type="button" class="btn btn-primary new-order-button" data-toggle="modal" data-target="#newOrder">New order</button>*@
-                    <button type="button" class="btn btn-primary new-order-button" onclick="openOrderForm()">New order</button>
+                    <button type="button" class="btn btn-primary new-order-button" id="new-order-button" onclick="openOrderForm()">New order</button>
                     <button type="button" class="btn btn-secondary" id="cancel-order-button" onclick="closeOrderForm()">Cancel</button>
                 </div>
             </div>
@@ -52,7 +52,7 @@
             </div>
             <div class="col-md-2 bordered" id="clock-section">
                 <div class="clock" id="clock">
-                    <script src="~/Scripts/clock.js" onload="startTime()"></script>
+
                 </div>
             </div>
             <div class="col-md-3 bordered" id="show-section">
@@ -61,19 +61,20 @@
                     <button class="btn btn-secondary btn-sm dropdown-toggle" id="show-orders-button" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Show Orders
                     </button>
-                    <button class="btn btn-secondary btn-sm dropdown-toggle" onclick="closeOrdersList()">Close</button>
 
+                    <button class="btn btn-secondary btn-sm dropdown-toggle" onclick="closeOrdersList()">Close</button>
+                    <button class="btn btn-secondary btn-sm dropdown-toggle" id="get-markers-button" @*onclick="getMarkers()"*@>Get Markers</button>
 
                     @*<a class="dropdown-item" href="#"></a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <a class="dropdown-item" href="#">Something else here</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Separated link</a>*@
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Separated link</a>*@
                 </div>
             </div>
         </div>
     </div>
-
+    <div id="map" style="margin-top: -20px"></div>
     <!-- ko with: newOrder -->
     @Html.Partial("~/Views/Webmap/OrderForm.cshtml", null, new ViewDataDictionary())
     @Html.Partial("~/Views/Webmap/OrdersList.cshtml", null, new ViewDataDictionary())
@@ -87,19 +88,23 @@
 }
 
 @section BottomScripts{
-    <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcmcPucdZL2QY298-vQjZbRhf2RKR7gfY&callback=initMap">
-    </script>
 
 
+
+
+    <script src="~/Scripts/clock.js" onload="startTime()"></script>
+    <script src="~/Scripts/autocompletion.js" @*onload="initAutocomplete()"*@></script>
 
     <script src="~/Scripts/map.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCpiNFqB5YUDucRFF1gzDU9XXTAY2BiXa4&libraries=places&callback=initMap" async defer>
+    </script>
     <script src="~/Scripts/jquery.validate.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.19.0.min.js"></script>
     <script src="~/Scripts/umd/popper.js"></script>
     <script src="~/Scripts/showorders.js"></script>
+
     @Scripts.Render("~/bundles/knockout")
     @Scripts.Render("~/bundles/app")
 }
 
-<div id="map" style="margin-top: -20px"></div>

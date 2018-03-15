@@ -1,16 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
+﻿using System.Linq;
 using System.Web;
 using System.Web.Http;
-using System.Web.Mvc;
-using System.Web.Script.Serialization;
 using Microsoft.AspNet.Identity.Owin;
 using Webmap_1A.Models;
-using System.Data.Entity;
 using System.Web.Http.Results;
+using System.Net;
+using System;
+using System.Net.Http;
+using System.Data.Entity;
+using System.Collections.Generic;
 
 namespace Webmap_1A.Controllers
 {
@@ -18,13 +16,24 @@ namespace Webmap_1A.Controllers
     //[Authorize]
     public class MeController : ApiController
     {
-        //private static readonly string connectionString = ConfigurationManager.ConnectionStrings["ConnStringDb1"].ConnectionString;
         private ApplicationUserManager _userManager;
         private OrderService _orderService;
-        
+
 
         public MeController()
         {
+        }
+
+        [Route("~/api/me/ShowDemo")]
+        [HttpGet]
+        public JsonResult<Wrecker> GetDemo()
+        {
+            Random rand = new Random();
+            float fract1 = 0.001f * rand.Next(10);
+            float fract2 = 0.001f * rand.Next(10);
+            Wrecker wrecker = new Wrecker();
+            //wrecker.CurLocation = new Location(51.295495f + fract1, 12.240548f + fract2);
+            return Json(wrecker);
         }
 
         public MeController(ApplicationUserManager userManager, OrderService orderService)
@@ -32,8 +41,9 @@ namespace Webmap_1A.Controllers
             UserManager = userManager;
             _orderService = orderService;
         }
-        [System.Web.Http.HttpGet]
-        public JsonResult<Order[]> ShowOrders()
+        [Route("~/api/me/ShowOrders")]
+        [HttpGet]
+        public JsonResult<Order[]> GetOrders()
         {
             Webmap_1AContext ordersContext = new Webmap_1AContext();
             var orders = ordersContext.Orders.ToArray();//ToListAsync().Result.ToDataTable();
@@ -52,61 +62,93 @@ namespace Webmap_1A.Controllers
             }
         }
 
+        [Route("api/me/{id:int}/GetWreckerById")]
+        [HttpGet]
+        public JsonResult<Wrecker> GetWreckerById(int id)
+        {
+            Webmap_1AContext wreckersContext = new Webmap_1AContext();
+            Wrecker wrecker = wreckersContext.Wreckers.Find(id);
+            return Json(wrecker);
+        }
 
-        //public IEnumerable<Order> Get()
-        //{
-        //    _orderService = new OrderService();
-        //    return _orderService.GetOrders();
-        //}
 
-        //[System.Web.Http.HttpGet]
-        //public JsonResult GetAllUser(int Id)
-        //{
-        //    List<Order> orders = new List<Order>();
-        //    string query = string.Format("Select * From Orders", Id);
-        //    SqlConnection connection = new SqlConnection(connectionString);
-        //    {
-        //        using (SqlCommand cmd = new SqlCommand(query, connection))
-        //        {
-        //            connection.Open();
-        //            SqlDataReader reader = cmd.ExecuteReader();
+        [Route("api/me/GetWreckers")]
+        [HttpGet]
+        public JsonResult<List<Wrecker>> GetWreckers()
+        {
+            Webmap_1AContext wreckersContext = new Webmap_1AContext();
+            return Json(wreckersContext.Wreckers.ToList());
+        }
 
-        //            while (reader.Read())
-        //            {
-        //                orders.Add(
-        //                    new Order
-        //                    {
-        //                        Id = int.Parse(reader["Id"].ToString()),
-        //                        Caller = (Caller) reader["Caller"],
-        //                        CurrentWrecker = (Wrecker) reader["CurrentWrecker"],
-        //                        PickFromAddress = (Address) reader["Address"],
-        //                        TakeToAddress = (Address) reader["Address"],
-        //                        OtherInfo = reader["OtherInfo"].ToString()
-        //                    }
-        //                );
-        //            }
-        //        }
-        //        return Json(orders, JsonRequestBehavior.AllowGet);
-        //    }
-        //}
-        [System.Web.Http.HttpPost]
+        [Route("api/me/{id:int}/SetWreckerLocation")]
+        [HttpPost]
+        public void SetWreckerLocation(int id, [FromBody]Location loc)
+        {
+            Webmap_1AContext wreckersContext = new Webmap_1AContext();
+            Wrecker wreckerToChange = wreckersContext.Wreckers.Find(id);
+
+            wreckerToChange.CurrentLocation.Lat = loc.Lat;
+            wreckerToChange.CurrentLocation.Lng = loc.Lng;
+
+            wreckersContext.SaveChanges();
+        }
+
+        [Route("api/me/orders")]
+        [HttpPost]
         public void Post(Order newOrder)
         {
-
             if (ModelState.IsValid)
             {
-                //try
-                //{
+                try
+                {
+                
                     _orderService = new OrderService();
                     _orderService.AddOrder(newOrder);
-                //}
-                //catch (Exception e)
-                //{
-                //    // TODO: log exception
-                //    throw new HttpResponseException(System.Net.HttpStatusCode.InternalServerError);
-                //}
-            }
 
+                     //var message = Request.CreateResponse(HttpStatusCode.Created, newOrder);
+                     //message.Headers.Location = new Uri(Request.RequestUri + newOrder.Id.ToString());
+                     //return message;
+                
+                }
+                catch (Exception ex)
+                {
+                    //return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+                }
+            }
+            //return Request.CreateResponse(HttpStatusCode.NoContent);
         }
+
+        [Route("~/api/me/{id:int}/setstatus")]
+        [HttpPost]
+        public HttpResponseMessage PostStatus(int id, [FromBody]string status)
+        {
+            Webmap_1AContext ordersContext = new Webmap_1AContext();
+            Order orderToChange = (Order) ordersContext.Orders.Find(id);
+            if (orderToChange != null)
+            {
+                try
+                {
+                    Enum.TryParse(status, out Order.OrderStatus st);
+                    orderToChange.CurrentStatus = st;
+                    ordersContext.SaveChanges();
+
+                    var message = Request.CreateResponse(HttpStatusCode.OK, orderToChange);
+                    message.Headers.Location = new Uri(Request.RequestUri.ToString());
+                    return message;
+                }
+                catch (Exception ex)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+                }
+            }
+            return null;
+        }
+
+
+        //public void SaveLocation(Wrecker wr)
+        //{
+        //    // save async in BD
+        //    // send SignalR clients
+        //}
     }
 }
