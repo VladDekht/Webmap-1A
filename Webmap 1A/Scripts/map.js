@@ -5,84 +5,48 @@ var pubnub;
 var placeSearch, autocompleteTo, autocompleteFrom;
 var markersNewTwo = [null, null];
 var wreckersMarkers = [];
+var webmapConnection;
+
+$(function () {
+    webmapConnection = $.connection.webmapHub; // Hub's name must begin with the lowercase letter
+    webmapConnection.client.SendLocation = function () {
+        
+    }
+    $.connection.hub.start()
+        .done(function () {
+        })
+        .fail(function () {
+            alert("Failed to start hub");
+        })
+
+    $.connection.webmapHub.client.sendLocation = function (id, location) {
+        updateWreckerMarker(id, location);
+    }
+});
+
+function updateWreckerMarker(id, location) {
+        var wreckerToUpdate = wreckersMarkers.find(function (obj) {
+            return obj.WreckerId === id;
+        });
+        if (wreckerToUpdate != undefined) {
+            wreckerToUpdate.Lat = location.Lat;
+            wreckerToUpdate.Lng = location.Lng;
+            wreckerToUpdate.marker.setPosition({ lat: wreckerToUpdate.Lat, lng: wreckerToUpdate.Lng });
+        }
+    }
+
 function initMap() {
     initAutocomplete();
-
+    
     var leipzig = {
         lat: 51.343479,
         lng: 12.387772
-    };
-
-    //var pubnub = new PubNub({
-    //    publishKey: 'pub-c-20b30f50-c894-4868-b503-32cfb561cc0c',
-    //    subscribeKey: 'sub-c-37aa0d7a-1ae7-11e8-acdc-3a42756f9040'
-    //});
-    
+    };  
 
     map = new google.maps.Map(document.getElementById('map'), {
         zoom: 11,
         center: leipzig
     });
-    //function getPosition() { // Заглушка
-    //    var randLat = 51 + Math.random();
-    //    var randLng = 12 + Math.random();
-    //    console.log("lat = " + randLat + " lng = " + randLng);
-    //    return { lat: randLat, lng: randLng };
-    //}
-    //
-    //function drawWrecker(mark) {
-    //    mark.setMap(null);
-    //    setMarker(mark, getPosition());
-    //}
-    //
-    //createMarker(getPosition());
-    //
-    //function setMarker(marker, LatLng) {
-    //    marker.setMap(null);
-    //    marker = new google.maps.Marker({
-    //        position: LatLng,
-    //        map: map
-    //    });
-    //}
-    //
-    //
-    //setInterval(function () {
-    //    drawWrecker(mark);
-    //}, 1000);
-    //window.lat = 37.7850;
-    //window.lng = -122.4383;
-    //function getLocation() {
-    //    if (navigator.geolocation) {
-    //        navigator.geolocation.getCurrentPosition(updatePosition);
-    //    }
-    //    return null;
-    //};
-    //function updatePosition(position) {
-    //    if (position) {
-    //        window.lat = position.coords.latitude;
-    //        window.lng = position.coords.longitude;
-    //    }
-    //}
-    //setInterval(function () { updatePosition(getLocation()); }, 10000);
-    //function currentLocation() {
-    //    return { lat: window.lat, lng: window.lng };
-    //};
-
-    //var redraw = function (payload) {
-    //    lat = payload.message.lat;
-    //    lng = payload.message.lng;
-    //    //map.setCenter({ lat: lat, lng: lng, alt: 0 });
-    //    mark.setPosition({ lat: lat, lng: lng, alt: 0 });
-    //};
-
-    //var pnChannel = "map2-channel";
-    //pubnub.subscribe({ channels: [pnChannel] });
-    //pubnub.addListener({ message: redraw });
-    //setInterval(function () {
-    //    pubnub.publish({ channel: pnChannel, message: currentLocation() });
-    //}, 5000);
-
-    //setMarker({ lat: 51.367195, lng: 12.366806 });
 
     
 
@@ -250,20 +214,19 @@ function initMap() {
         thirdZone.setMap(map);
         document.getElementById('zone3-button-save').style.visibility = "hidden";
     })
-    function wreckersMarkers() {
+
+    function initializeWreckersMarkers() {
         var actionUrl = "../api/me/GetWreckers";
         $.getJSON(actionUrl, function (res) {
             $.each(res, function (i) {
-                actionUrl = "/api/me/" + res[i].WreckerId + "/GetWreckerById";
-                $.getJSON(actionUrl, function (wrecker) {
-                    var LatLng = { lat: wrecker.CurrentLocation.Lat, lng: wrecker.CurrentLocation.Lng };
-                    createMarker(LatLng);
-
-                });
+                var wrecker = { WreckerId: res[i].WreckerId, Lat: res[i].CurrentLocation.Lat, Lng: res[i].CurrentLocation.Lng, marker: createWreckerMarker(res[i] ,{ lat: res[i].CurrentLocation.Lat, lng: res[i].CurrentLocation.Lng })};
+                wreckersMarkers.push(wrecker);
             });
         });
     }
-    document.getElementById('get-markers-button').addEventListener("click", wreckersMarkers);
+    initializeWreckersMarkers();
+    
+    //document.getElementById('get-markers-button').addEventListener("click", wreckersMarkers);
 }
 
 function closeOrdersList() {
@@ -329,7 +292,31 @@ function createMarker(LatLng) {
     return marker;
 }
 
+function createWreckerMarker(wrecker, LatLng) {
+    //centering the map by new marker position can be added 
+    var marker = new google.maps.Marker({
+        position: LatLng,
+        title: wrecker.PlateNum,
+        icon: {
+            url: "../Images/WUnloaded.png",
+            size: new google.maps.Size(50,50),
+            origin: new google.maps.Point(0, 0),
+            anchor: new google.maps.Point(0, 25)
+        },
+        map: map
+    });
 
+    marker.addListener('click', function () {
+        var contentString = wrecker.PlateNum + " Lat: " + LatLng.lat + " Lng: " + LatLng.lng;//"My latitude is " + LatLng.lat + " and langitude is " + LatLng.lng;
+        var infowindow = new google.maps.InfoWindow({
+            content: contentString
+        });
+        infowindow.open(map, marker);
+    });
+    
+
+    return marker;
+}
 
 
 document.getElementById("show-button-from").addEventListener("click", function () {

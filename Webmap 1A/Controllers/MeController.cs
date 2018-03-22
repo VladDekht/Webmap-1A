@@ -9,6 +9,7 @@ using System;
 using System.Net.Http;
 using System.Data.Entity;
 using System.Collections.Generic;
+using Webmap_1A.Hubs;
 
 namespace Webmap_1A.Controllers
 {
@@ -18,22 +19,11 @@ namespace Webmap_1A.Controllers
     {
         private ApplicationUserManager _userManager;
         private OrderService _orderService;
+        //private WreckersRepository _wreckersRepo = new WreckersRepository();
 
 
         public MeController()
         {
-        }
-
-        [Route("~/api/me/ShowDemo")]
-        [HttpGet]
-        public JsonResult<Wrecker> GetDemo()
-        {
-            Random rand = new Random();
-            float fract1 = 0.001f * rand.Next(10);
-            float fract2 = 0.001f * rand.Next(10);
-            Wrecker wrecker = new Wrecker();
-            //wrecker.CurLocation = new Location(51.295495f + fract1, 12.240548f + fract2);
-            return Json(wrecker);
         }
 
         public MeController(ApplicationUserManager userManager, OrderService orderService)
@@ -41,6 +31,8 @@ namespace Webmap_1A.Controllers
             UserManager = userManager;
             _orderService = orderService;
         }
+
+
         [Route("~/api/me/ShowOrders")]
         [HttpGet]
         public JsonResult<Order[]> GetOrders()
@@ -62,6 +54,14 @@ namespace Webmap_1A.Controllers
             }
         }
 
+        [Route("api/me/GetWreckers")]
+        [HttpGet]
+        public JsonResult<List<Wrecker>> GetWreckers()
+        {
+            Webmap_1AContext wreckersContext = new Webmap_1AContext();
+            return Json(wreckersContext.Wreckers.ToList());
+        }
+
         [Route("api/me/{id:int}/GetWreckerById")]
         [HttpGet]
         public JsonResult<Wrecker> GetWreckerById(int id)
@@ -69,15 +69,6 @@ namespace Webmap_1A.Controllers
             Webmap_1AContext wreckersContext = new Webmap_1AContext();
             Wrecker wrecker = wreckersContext.Wreckers.Find(id);
             return Json(wrecker);
-        }
-
-
-        [Route("api/me/GetWreckers")]
-        [HttpGet]
-        public JsonResult<List<Wrecker>> GetWreckers()
-        {
-            Webmap_1AContext wreckersContext = new Webmap_1AContext();
-            return Json(wreckersContext.Wreckers.ToList());
         }
 
         [Route("api/me/{id:int}/SetWreckerLocation")]
@@ -89,6 +80,8 @@ namespace Webmap_1A.Controllers
 
             wreckerToChange.CurrentLocation.Lat = loc.Lat;
             wreckerToChange.CurrentLocation.Lng = loc.Lng;
+
+            WebmapHub.SendLocation(id, loc);
 
             wreckersContext.SaveChanges();
         }
