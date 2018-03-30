@@ -118,7 +118,7 @@ function statusChanged(i) {
         url: "/api/me/" + i + "/setstatus",
         data: data,
         success: function (response) {
-            if (response != null) {
+            if (response !== null) {
                 alert("Id : " + response.id + ", Current Status : " + response.currentStatus);
             } else {
                 alert("Something went wrong");

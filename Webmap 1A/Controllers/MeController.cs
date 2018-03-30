@@ -22,9 +22,7 @@ namespace Webmap_1A.Controllers
         //private WreckersRepository _wreckersRepo = new WreckersRepository();
 
 
-        public MeController()
-        {
-        }
+        public MeController(){}
 
         public MeController(ApplicationUserManager userManager, OrderService orderService)
         {
@@ -54,12 +52,28 @@ namespace Webmap_1A.Controllers
             }
         }
 
+        [Route("api/me/GetWreckersCollection")]
+        [HttpGet]
+        public IEnumerable<Wrecker> GetWreckersCollection()
+        {
+            Webmap_1AContext wreckersContext = new Webmap_1AContext();
+            return wreckersContext.Wreckers.ToList();
+        }
+
         [Route("api/me/GetWreckers")]
         [HttpGet]
         public JsonResult<List<Wrecker>> GetWreckers()
         {
             Webmap_1AContext wreckersContext = new Webmap_1AContext();
             return Json(wreckersContext.Wreckers.ToList());
+        }
+
+        [Route("api/me/GetDrivers")]
+        [HttpGet]
+        public JsonResult<List<Driver>> GetDrivers()
+        {
+            Webmap_1AContext driversContext = new Webmap_1AContext();
+            return Json(driversContext.Drivers.ToList());
         }
 
         [Route("api/me/{id:int}/GetWreckerById")]

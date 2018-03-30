@@ -3,6 +3,7 @@
 }
 @model  Webmap_1A.Models.Order
 
+
 <div class="dropdown-menu  col-md-4" id="form-menu">
     <div class="order-form-body">
         <div class=" container">
@@ -26,14 +27,14 @@
                             @Html.TextBoxFor(m => m.Caller.PhoneNum, new { @class = "my-form-control" })
                             @Html.ValidationMessageFor(m => m.Caller.PhoneNum)
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-2" id="driver-container">
                             <h6>Driver Name</h6>
-                            @Html.TextBoxFor(m => m.CurrentWrecker.CurrentDriver.Name, new { @class = "my-form-control" })
+                            @Html.TextBoxFor(m => m.CurrentWrecker.CurrentDriver.Name, new { @class = "my-form-control", id = "driver-plate-box", style = "display: none;" })
                             @Html.ValidationMessageFor(m => m.CurrentWrecker.CurrentDriver.Name)
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-2 " id="wrecker-plate-div">
                             <h6>Plate</h6>
-                            @Html.TextBoxFor(m => m.CurrentWrecker.PlateNum, new { @class = "my-form-control" })
+                            @Html.TextBoxFor(m => m.CurrentWrecker.PlateNum, new { @class = "my-form-control", id = "wrecker-plate-box", style = "display: none;" })
                             @Html.ValidationMessageFor(m => m.CurrentWrecker.PlateNum)
                         </div>
                     </div>

@@ -28,7 +28,7 @@ function updateWreckerMarker(id, location) {
         var wreckerToUpdate = wreckersMarkers.find(function (obj) {
             return obj.WreckerId === id;
         });
-        if (wreckerToUpdate != undefined) {
+        if (wreckerToUpdate !== undefined) {
             wreckerToUpdate.Lat = location.Lat;
             wreckerToUpdate.Lng = location.Lng;
             wreckerToUpdate.marker.setPosition({ lat: wreckerToUpdate.Lat, lng: wreckerToUpdate.Lng });
@@ -36,8 +36,13 @@ function updateWreckerMarker(id, location) {
     }
 
 function initMap() {
-    initAutocomplete();
+
     
+
+    initAutocomplete();
+
+    SetWreckers();
+    SetDrivers();
     var leipzig = {
         lat: 51.343479,
         lng: 12.387772
@@ -324,7 +329,7 @@ document.getElementById("show-button-from").addEventListener("click", function (
     if (address) {
         geocoder = new google.maps.Geocoder();
         geocoder.geocode({ 'address': address }, function (results, status) {
-            if (status == 'OK') {
+            if (status === 'OK') {
                 if (markersNewTwo[0])
                     markersNewTwo[0].setMap(null);
                 document.getElementById('lat_from').value = results[0].geometry.location.lat();
@@ -342,7 +347,7 @@ document.getElementById("show-button-to").addEventListener("click", function () 
     if (address) {
         geocoder = new google.maps.Geocoder();
         geocoder.geocode({ 'address': address }, function (results, status) {
-            if (status == 'OK') {
+            if (status === 'OK') {
                 if (markersNewTwo[1])
                     markersNewTwo[1].setMap(null);
                 document.getElementById('lat_to').value = results[0].geometry.location.lat();
@@ -354,6 +359,56 @@ document.getElementById("show-button-to").addEventListener("click", function () 
         });
     }
 });
+
+function SetWreckers() {
+    var select = document.createElement("select");
+    select.className = "plate-list custom-select";
+    var op = document.createElement("option");
+    op.innerHTML = "-";
+    select.appendChild(op);
+    op.selected = true;
+
+    $.getJSON("../api/me/GetWreckers", function (res) {
+        $.each(res, function (i) {
+            var option = document.createElement("option");
+            select.appendChild(option);
+            option.innerHTML = res[i].PlateNum.toString();
+            
+        });
+    });
+    select.onchange = function () {
+        var val = select.selectedOptions[0].innerHTML;
+        if (val !== "-") {
+            $("#wrecker-plate-box").val(select.selectedOptions[0].innerHTML);
+        }
+    }
+    $('#wrecker-plate-div').append(select);
+}
+
+function SetDrivers() {
+    var select = document.createElement("select");
+    select.className = "plate-list custom-select";
+    var op = document.createElement("option");
+    op.innerHTML = "-";
+    select.appendChild(op);
+    op.selected = true;
+
+    $.getJSON("../api/me/GetDrivers", function (res) {
+        $.each(res, function (i) {
+            var option = document.createElement("option");
+            select.appendChild(option);
+            option.innerHTML = res[i].Name.toString();
+
+        });
+    });
+    select.onchange = function () {
+        var val = select.selectedOptions[0].innerHTML;
+        if (val !== "-") {
+            $("#driver-plate-box").val(select.selectedOptions[0].innerHTML);
+        }
+    }
+    $('#driver-container').append(select);
+}
 
 //document.getElementById("show-button-2").addEventListener("click", function () {
 //    var address = document.getElementById('city-to').value + " " + document.getElementById('street-to').value + " " + document.getElementById('house-num-to').value;

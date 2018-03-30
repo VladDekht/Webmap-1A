@@ -14,5 +14,6 @@ namespace Webmap_1A.Models
 
         public DbSet<Order> Orders { get; set; }
         public DbSet<Wrecker> Wreckers { get; set; }
+        public DbSet<Driver> Drivers { get; set; }
     }
 }
