@@ -23,7 +23,7 @@ namespace Webmap_1A.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
+            : base("name=Webmap_1AContext", throwIfV1Schema: false)
         {
         }
 

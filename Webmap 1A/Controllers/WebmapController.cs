@@ -8,6 +8,7 @@ using Webmap_1A.Models;
 
 namespace Webmap_1A.Controllers
 {
+    [Authorize]
     public class WebmapController : Controller
     {
         

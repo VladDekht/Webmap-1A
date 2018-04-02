@@ -27,7 +27,7 @@ namespace Webmap_1A
                 "~/Scripts/app/common.js",
                 "~/Scripts/app/app.datamodel.js",
                 "~/Scripts/app/app.viewmodel.js",
-                //"~/Scripts/app/home.viewmodel.js",
+                "~/Scripts/app/home.viewmodel.js",
                 "~/Scripts/app/webmap.viewmodel.js",
                 "~/Scripts/app/_run.js"));
 

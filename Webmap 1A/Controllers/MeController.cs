@@ -14,7 +14,7 @@ using Webmap_1A.Hubs;
 namespace Webmap_1A.Controllers
 {
 
-    //[Authorize]
+    [Authorize]
     public class MeController : ApiController
     {
         private ApplicationUserManager _userManager;
