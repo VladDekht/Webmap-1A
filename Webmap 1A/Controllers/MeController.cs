@@ -100,6 +100,7 @@ namespace Webmap_1A.Controllers
             wreckersContext.SaveChanges();
         }
 
+        [AllowAnonymous]
         [Route("api/me/orders")]
         [HttpPost]
         public void Post(Order newOrder)

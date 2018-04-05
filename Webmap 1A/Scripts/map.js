@@ -6,11 +6,12 @@ var placeSearch, autocompleteTo, autocompleteFrom;
 var markersNewTwo = [null, null];
 var wreckersMarkers = [];
 var webmapConnection;
+var directionsDisplay, directionsService;
 
 $(function () {
     webmapConnection = $.connection.webmapHub; // Hub's name must begin with the lowercase letter
     webmapConnection.client.SendLocation = function () {
-        
+
     }
     $.connection.hub.start()
         .done(function () {
@@ -25,19 +26,50 @@ $(function () {
 });
 
 function updateWreckerMarker(id, location) {
-        var wreckerToUpdate = wreckersMarkers.find(function (obj) {
-            return obj.WreckerId === id;
-        });
-        if (wreckerToUpdate !== undefined) {
-            wreckerToUpdate.Lat = location.Lat;
-            wreckerToUpdate.Lng = location.Lng;
-            wreckerToUpdate.marker.setPosition({ lat: wreckerToUpdate.Lat, lng: wreckerToUpdate.Lng });
-        }
+    var wreckerToUpdate = wreckersMarkers.find(function (obj) {
+        return obj.WreckerId === id;
+    });
+    if (wreckerToUpdate !== undefined) {
+        wreckerToUpdate.Lat = location.Lat;
+        wreckerToUpdate.Lng = location.Lng;
+        wreckerToUpdate.marker.setPosition({ lat: wreckerToUpdate.Lat, lng: wreckerToUpdate.Lng });
     }
+}
+
+function calculateRoute(origin, destination) {
+
+    var request = {
+        origin: origin,
+        destination: destination,
+        //avoid: "highways", TODO
+        travelMode: 'DRIVING'
+    };
+
+    directionsService.route(request, function (result, status) {
+        if (status = "OK") {
+            directionsDisplay.setDirections(result);
+            alert(result.routes[0].legs[0].distance.text + " " + result.routes[0].legs[0].duration.text);
+        }
+    })
+
+
+
+}
+
+$("#draw-route-button").click(function () {
+    if (markersNewTwo[0] !== null && markersNewTwo[1] !== null) {
+        calculateRoute(markersNewTwo[0].position, markersNewTwo[1].position);
+        directionsDisplay.setMap(map);
+
+    }
+});
+$("#clear-route-button").click(function () {
+        directionsDisplay.setMap(null);
+});
 
 function initMap() {
 
-    
+
 
     initAutocomplete();
 
@@ -46,17 +78,19 @@ function initMap() {
     var leipzig = {
         lat: 51.343479,
         lng: 12.387772
-    };  
+    };
 
     map = new google.maps.Map(document.getElementById('map'), {
         zoom: 11,
         center: leipzig
     });
+    directionsDisplay = new google.maps.DirectionsRenderer();
+    directionsService = new google.maps.DirectionsService();
+    directionsDisplay.setMap(map);
 
-    
 
     var firstZoneCoords = [
-        { lat: 51.295495, lng: 12.240548 }, 
+        { lat: 51.295495, lng: 12.240548 },
         { lat: 51.313174, lng: 12.215440 },
         { lat: 51.378974, lng: 12.225440 },
         { lat: 51.418458, lng: 12.268922 },
@@ -88,7 +122,7 @@ function initMap() {
     ];
 
     var firstZone = new google.maps.Polygon({
-        paths: firstZoneCoords,
+        paths: [firstZoneCoords,secondZoneCoords.reverse()],
         strokeColor: '#0de5db',
         strokeOpacity: 0.8,
         strokeWeight: 1,
@@ -98,7 +132,7 @@ function initMap() {
     });
 
     var secondZone = new google.maps.Polygon({
-        paths: secondZoneCoords,
+        paths: [secondZoneCoords, thirdZoneCoords],
         strokeColor: '#003366',
         strokeOpacity: 0.8,
         strokeWeight: 1,
@@ -116,15 +150,35 @@ function initMap() {
         fillOpacity: 0.7,
         geodesic: true
     });
+    
 
-    firstZone.setMap(map);
-    secondZone.setMap(map);
-    thirdZone.setMap(map);
+    document.getElementById('zone1-button-show').addEventListener("click", function () {
+        var buttonShow = document.getElementById('zone1-button-show');
+        var buttonEdit = document.getElementById('zone1-button-edit');
+        var buttonSave = document.getElementById('zone1-button-save');
+        if (buttonShow.innerHTML === "Hide") {
+            buttonShow.innerHTML = "Show";
+            firstZone.setMap(null);
+            buttonSave.style.visibility = "hidden";
+            buttonEdit.style.visibility = "hidden";
+            return;
+        }
+        if (buttonShow.innerHTML === "Show") {
+            firstZone.setMap(map);
+            buttonShow.innerHTML = "Hide";
+            buttonEdit.style.visibility = "visible";
+            if (firstZone.editable) {
+                buttonSave.style.visibility = "visible";
+            }
+            return;
+        }
+    });
 
     document.getElementById('zone1-button-edit').addEventListener("click", function () {
         firstZone.setMap(null);
+
         firstZone = new google.maps.Polygon({
-            paths: firstZoneCoords,
+            paths: firstZone.getPaths(),
             strokeColor: '#0de5db',
             strokeOpacity: 0.8,
             strokeWeight: 1,
@@ -135,11 +189,12 @@ function initMap() {
         });
         firstZone.setMap(map);
         document.getElementById('zone1-button-save').style.visibility = "visible";
-    })
+    });
 
     document.getElementById('zone1-button-save').addEventListener("click", function () {
         firstZone.setMap(null);
-        firstZoneCoords = firstZone.getPath();
+        firstZoneCoords = firstZone.getPaths();
+        //secondZoneCoords = secondZone.getPath();
         firstZone = new google.maps.Polygon({
             paths: firstZoneCoords,
             strokeColor: '#0de5db',
@@ -152,12 +207,34 @@ function initMap() {
         });
         firstZone.setMap(map);
         document.getElementById('zone1-button-save').style.visibility = "hidden";
-    })
+    });
+
+    document.getElementById('zone2-button-show').addEventListener("click", function () {
+        var buttonShow = document.getElementById('zone2-button-show');
+        var buttonEdit = document.getElementById('zone2-button-edit');
+        var buttonSave = document.getElementById('zone2-button-save');
+        if (buttonShow.innerHTML === "Hide") {
+            buttonShow.innerHTML = "Show";
+            secondZone.setMap(null);
+            buttonSave.style.visibility = "hidden";
+            buttonEdit.style.visibility = "hidden";
+            return;
+        }
+        if (buttonShow.innerHTML === "Show") {
+            secondZone.setMap(map);
+            buttonShow.innerHTML = "Hide";
+            buttonEdit.style.visibility = "visible";
+            if (secondZone.editable) {
+                buttonSave.style.visibility = "visible";
+            }
+            return;
+        }
+    });
 
     document.getElementById('zone2-button-edit').addEventListener("click", function () {
         secondZone.setMap(null);
         secondZone = new google.maps.Polygon({
-            paths: secondZoneCoords,
+            paths: secondZone.getPaths(),
             strokeColor: '#003366',
             strokeOpacity: 0.8,
             strokeWeight: 1,
@@ -168,11 +245,11 @@ function initMap() {
         });
         secondZone.setMap(map);
         document.getElementById('zone2-button-save').style.visibility = "visible";
-    })
+    });
 
     document.getElementById('zone2-button-save').addEventListener("click", function () {
         secondZone.setMap(null);
-        secondZoneCoords = secondZone.getPath();
+        secondZoneCoords = secondZone.getPaths();
         secondZone = new google.maps.Polygon({
             paths: secondZoneCoords,
             strokeColor: '#003366',
@@ -185,7 +262,29 @@ function initMap() {
         });
         secondZone.setMap(map);
         document.getElementById('zone2-button-save').style.visibility = "hidden";
-    })
+    });
+
+    document.getElementById('zone3-button-show').addEventListener("click", function () {
+        var buttonShow = document.getElementById('zone3-button-show');
+        var buttonEdit = document.getElementById('zone3-button-edit');
+        var buttonSave = document.getElementById('zone3-button-save');
+        if (buttonShow.innerHTML === "Hide") {
+            buttonShow.innerHTML = "Show";
+            thirdZone.setMap(null);
+            buttonSave.style.visibility = "hidden";
+            buttonEdit.style.visibility = "hidden";
+            return;
+        }
+        if (buttonShow.innerHTML === "Show") {
+            thirdZone.setMap(map);
+            buttonShow.innerHTML = "Hide";
+            buttonEdit.style.visibility = "visible";
+            if (thirdZone.editable) {
+                buttonSave.style.visibility = "visible";
+            }
+            return;
+        }
+    });
 
     document.getElementById('zone3-button-edit').addEventListener("click", function () {
         thirdZone.setMap(null);
@@ -201,7 +300,7 @@ function initMap() {
         });
         thirdZone.setMap(map);
         document.getElementById('zone3-button-save').style.visibility = "visible";
-    })
+    });
 
     document.getElementById('zone3-button-save').addEventListener("click", function () {
         thirdZone.setMap(null);
@@ -218,45 +317,39 @@ function initMap() {
         });
         thirdZone.setMap(map);
         document.getElementById('zone3-button-save').style.visibility = "hidden";
-    })
+    });
+
+
 
     function initializeWreckersMarkers() {
         var actionUrl = "../api/me/GetWreckers";
-        $.getJSON(actionUrl, function (res) {
-            $.each(res, function (i) {
-                var wrecker = { WreckerId: res[i].WreckerId, Lat: res[i].CurrentLocation.Lat, Lng: res[i].CurrentLocation.Lng, marker: createWreckerMarker(res[i] ,{ lat: res[i].CurrentLocation.Lat, lng: res[i].CurrentLocation.Lng })};
-                wreckersMarkers.push(wrecker);
-            });
+        $.ajax({
+            method: 'get',
+            url: "../api/me/GetWreckers",
+            contentType: "application/json; charset=utf-8",
+            //data: jsonObj, // JSON.stringify(jsonObj),
+            headers: {
+                'Authorization': 'Bearer ' + sessionStorage.getItem("accessToken")
+            },
+            success: function (res) {
+                $.each(res, function (i) {
+                    var wrecker = { WreckerId: res[i].WreckerId, Lat: res[i].CurrentLocation.Lat, Lng: res[i].CurrentLocation.Lng, marker: createWreckerMarker(res[i], { lat: res[i].CurrentLocation.Lat, lng: res[i].CurrentLocation.Lng }) };
+                    wreckersMarkers.push(wrecker);
+                });
+            }
         });
     }
     initializeWreckersMarkers();
-    
+
     //document.getElementById('get-markers-button').addEventListener("click", wreckersMarkers);
 }
 
 function closeOrdersList() {
-        var menu = document.getElementById("show-orders-container");
-        menu.style.display = "none";
-    }
+    var menu = document.getElementById("show-orders-container");
+    menu.style.display = "none";
+}
 
 var INTERVAL = 2000;
-
-function getMarkers() {
-    var actionUrl = "../api/Me/ShowDemo";
-    $.getJSON(actionUrl, function (res) {
-        //for (var i = 0, len = res.length; i < len; i++) {
-        //console.log(res.CurLocation.Lat);
-        //console.log(res.CurLocation.Lng);
-        mark.setMap(null);
-            mark= new google.maps.Marker({
-                position: new google.maps.LatLng(res.CurLocation.Lat, res.CurLocation.Lng),
-                //icon: "../Content/Images/trucker.png",
-                map: map
-            });
-        //}
-        window.setTimeout(getMarkers, INTERVAL);
-    }, "json");
-}
 
 function openOrderForm() {
     var menu = document.getElementById("form-menu");
@@ -304,7 +397,7 @@ function createWreckerMarker(wrecker, LatLng) {
         title: wrecker.PlateNum,
         icon: {
             url: "../Images/WUnloaded.png",
-            size: new google.maps.Size(50,50),
+            size: new google.maps.Size(50, 50),
             origin: new google.maps.Point(0, 0),
             anchor: new google.maps.Point(0, 25)
         },
@@ -318,7 +411,7 @@ function createWreckerMarker(wrecker, LatLng) {
         });
         infowindow.open(map, marker);
     });
-    
+
 
     return marker;
 }
@@ -368,14 +461,32 @@ function SetWreckers() {
     select.appendChild(op);
     op.selected = true;
 
-    $.getJSON("../api/me/GetWreckers", function (res) {
-        $.each(res, function (i) {
-            var option = document.createElement("option");
-            select.appendChild(option);
-            option.innerHTML = res[i].PlateNum.toString();
-            
-        });
+    $.ajax({
+        method: 'get',
+        url: "../api/me/GetWreckers",
+        contentType: "application/json; charset=utf-8",
+        //data: jsonObj, // JSON.stringify(jsonObj),
+        headers: {
+            'Authorization': 'Bearer ' + sessionStorage.getItem("accessToken")
+        },
+        success: function (res) {
+            $.each(res, function (i) {
+                var option = document.createElement("option");
+                select.appendChild(option);
+                option.innerHTML = res[i].PlateNum.toString();
+
+            });
+        }
     });
+
+    //$.getJSON("../api/me/GetWreckers", function (res) {
+    //    $.each(res, function (i) {
+    //        var option = document.createElement("option");
+    //        select.appendChild(option);
+    //        option.innerHTML = res[i].PlateNum.toString();
+
+    //    });
+    //});
     select.onchange = function () {
         var val = select.selectedOptions[0].innerHTML;
         if (val !== "-") {
@@ -393,14 +504,33 @@ function SetDrivers() {
     select.appendChild(op);
     op.selected = true;
 
-    $.getJSON("../api/me/GetDrivers", function (res) {
-        $.each(res, function (i) {
-            var option = document.createElement("option");
-            select.appendChild(option);
-            option.innerHTML = res[i].Name.toString();
 
-        });
+    $.ajax({
+        method: 'get',
+        url: "../api/me/GetDrivers",
+        contentType: "application/json; charset=utf-8",
+        //data: jsonObj, // JSON.stringify(jsonObj),
+        headers: {
+            'Authorization': 'Bearer ' + sessionStorage.getItem("accessToken")
+        },
+        success: function (res) {
+            $.each(res, function (i) {
+                var option = document.createElement("option");
+                select.appendChild(option);
+                option.innerHTML = res[i].Name.toString();
+
+            });
+        }
     });
+
+    //$.getJSON("../api/me/GetDrivers", function (res) {
+    //    $.each(res, function (i) {
+    //        var option = document.createElement("option");
+    //        select.appendChild(option);
+    //        option.innerHTML = res[i].Name.toString();
+
+    //    });
+    //});
     select.onchange = function () {
         var val = select.selectedOptions[0].innerHTML;
         if (val !== "-") {
@@ -410,25 +540,3 @@ function SetDrivers() {
     $('#driver-container').append(select);
 }
 
-//document.getElementById("show-button-2").addEventListener("click", function () {
-//    var address = document.getElementById('city-to').value + " " + document.getElementById('street-to').value + " " + document.getElementById('house-num-to').value;
-//    geocoder = new google.maps.Geocoder();
-//    geocoder.geocode({ 'address': address }, function (results, status) {
-//        if (status == 'OK') {
-//            for (var i = 0; i < results.length; i++) {
-//                var elem = document.createElement("a");
-//                elem.class = "list-group-item list-group-item-action";
-//                var res = results[i];
-//                var h5 = document.createElement('h5');
-//                h5.innerHTML = results[i].formatted_address;
-
-//                elem.appendChild(h5);
-//                h5.addEventListener("click", listItemClicked(results[i]));
-//                document.getElementById("address-list-container").appendChild(elem);
-//            }
-//            createListBox(2);
-//        } else {
-//            alert('Geocode was not successful for the following reason: ' + status);
-//        }
-//    });
-//});

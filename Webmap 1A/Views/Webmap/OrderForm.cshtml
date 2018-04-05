@@ -9,7 +9,7 @@
         <div class=" container">
 
 
-            @using (Html.BeginForm("orders", "api/me", FormMethod.Post))
+            @using (Html.BeginForm("orders", "api/me",FormMethod.Post))
             {
                 <div class="row">
                     <div class="col-md-12">
@@ -127,7 +127,11 @@
                                 @Html.ValidationMessageFor(m => m.TakeToAddress.HouseNum)
                             </div>
                         </div>
+                        <button type="button" id="draw-route-button" class="btn btn-sm btn-secondary" style="margin-left:40%;margin-top: 10px;">Draw route</button>
+                        <button type="button" id="clear-route-button" class="btn btn-sm btn-secondary" style="margin-top: 10px;">Clear route</button>
                     </div>
+                    
+
                 </div>
                 <div class="row">
                     <div class="col-md-12 container">
