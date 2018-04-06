@@ -1,24 +1,36 @@
-﻿@{
-    ViewBag.Title = "OrdersList";
-}
-
-<div class="row ">
-    <div class="dropdown-menu col-md-6 pre-scrollable" id="show-orders-container">
+﻿<div class="row" data-bind="visible: shouldShowOrders">
+    <div class="dropdown-menu col-md-6 pre-scrollable" style="display:block; position:absolute; margin:-88vh 0 0 94vh">
         <table id="show-orders-table">
-            <tr>
-                <th id="order-id-col">Id</th>
-                <th id="caller-type-col">Caller Type</th>
-                <th id="caller-name-col">Caller Name</th>
-                <th id="caller-phonenum-col">Caller PhoneNum</th>
-                <th id="pickfromaddress-col">PickFromAddress</th>
-                <th id="pickfromaddress-zip-col">PickFromAddress ZIP</th>
-                <th id="taketoaddress-col">TakeToAddress City</th>
-                <th id="taketoaddress-zip-col">TakeToAddress ZIP</th>
-                <th id="otherinfo-col">Other Info</th>
-                @*<td id="wrecker-name-col">Caller Name</td>*@
-                @*<td id="Id">Id</td>
-                    <td id="Id">Id</td>*@
-            </tr>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Caller Type</th>
+                    <th>Caller Name</th>
+                    <th>Caller PhoneNum</th>
+                    <th>PickFromAddress</th>
+                    <th>PickFromAddress ZIP</th>
+                    <th>TakeToAddress City</th>
+                    <th>TakeToAddress ZIP</th>
+                    <th>Other Info</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: ordersList.items">
+                <tr>
+                    <td><span data-bind="text: id"></span></td>
+                    <td><span data-bind="text: callerType"></span></td>
+                    <td><span data-bind="text: callerName"></span></td>
+                    <td><span data-bind="text: callerPhone"></span></td>
+                    <td><span data-bind="text: pickFromAddress"></span></td>
+                    <td><span data-bind="text: pickFromZip"></span></td>
+                    <td><span data-bind="text: takeToAddress"></span></td>
+                    <td><span data-bind="text: takeToZip"></span></td>
+                    <td><span data-bind="text: otherInfo"></span></td>
+                    <td>
+                        <select data-bind="options: availableStates, optionsText: 'value', optionsValue: 'key', value: selectedStatus"></select>
+                    </td>
+                </tr>
+            </tbody>
         </table>
     </div>
 </div>
