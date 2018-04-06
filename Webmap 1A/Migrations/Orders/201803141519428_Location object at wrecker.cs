@@ -14,8 +14,8 @@ namespace Webmap_1A.Migrations.Orders
                     WreckerId = c.Int(nullable: false, identity: true),
                     PlateNum = c.String(nullable: false),
                     CurrentDriver_DriverId = c.Int(),
-                    Location_Lat = c.Single(nullable: false),
-                    Location_Lng = c.Single(nullable: false),
+                    Location_Lat = c.Single(nullable: true),
+                    Location_Lng = c.Single(nullable: true),
                 })
                 .PrimaryKey(t => t.WreckerId)
                 .ForeignKey("dbo.Drivers", t => t.CurrentDriver_DriverId)

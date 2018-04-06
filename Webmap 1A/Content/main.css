@@ -95,24 +95,27 @@ hr{
 #zone1-section{
 }
 
-#zone1-button-edit{
-	background-color: #0de5db;
+#zone1-button-edit {
+    background-color: #0de5db;
+    visibility: hidden;
 }
 #zone1-button-save{
 	background-color: #0de5db;
 	visibility : hidden;
 }
 
-#zone2-button-edit{
-	background-color: #003366;
+#zone2-button-edit {
+    background-color: #003366;
+    visibility: hidden;
 }
 #zone2-button-save{
 	background-color: #003366;
 	visibility : hidden;
 }
 
-#zone3-button-edit{
-	background-color: #393877;
+#zone3-button-edit {
+    background-color: #393877;
+    visibility: hidden;
 }
 #zone3-button-save{
 	background-color: #393877;
