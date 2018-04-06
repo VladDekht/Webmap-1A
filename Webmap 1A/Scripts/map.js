@@ -344,11 +344,6 @@ function initMap() {
     //document.getElementById('get-markers-button').addEventListener("click", wreckersMarkers);
 }
 
-function closeOrdersList() {
-    var menu = document.getElementById("show-orders-container");
-    menu.style.display = "none";
-}
-
 var INTERVAL = 2000;
 
 function openOrderForm() {
